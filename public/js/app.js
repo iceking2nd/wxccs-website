@@ -1769,8 +1769,6 @@ var accounts_data = {};
                 this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
             }
             this.currentSort = s;
-            console.log(this.currentSort);
-            console.log(this.currentSortDir);
         }
     },
     computed: {
