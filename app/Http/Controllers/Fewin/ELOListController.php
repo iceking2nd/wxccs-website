@@ -43,8 +43,6 @@ class ELOListController extends Controller
                 $res = json_decode($response->getBody()->getContents(),true);
                 if(!is_null($res))
                 {
-                    $res['data']['static'] = $res['data']['data'];
-                    unset($res['data']['data']);
                     $this->fe_result[$res['data']['user']['domain']] = $res['data'];
                 }
             },
@@ -61,7 +59,7 @@ class ELOListController extends Controller
         {
             $item['username'] = $this->fe_result[$item->domain_id]['user']['username'];
             $item['avatar_url'] = $this->fe_result[$item->domain_id]['user']['avatar_url'];
-            $item['elo'] = $this->fe_result[$item->domain_id]['static']['elo'];
+            $item['elo'] = $this->fe_result[$item->domain_id]['data']['elo'];
             return $item;
         });
 
