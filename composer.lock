@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.55.7",
+            "version": "3.55.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "6cda2e7c4b2e7e61feea2e8b4d950c8e6ab6b82e"
+                "reference": "2be78854e31b458a764914696a8b9dc4c9081e92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6cda2e7c4b2e7e61feea2e8b4d950c8e6ab6b82e",
-                "reference": "6cda2e7c4b2e7e61feea2e8b4d950c8e6ab6b82e",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2be78854e31b458a764914696a8b9dc4c9081e92",
+                "reference": "2be78854e31b458a764914696a8b9dc4c9081e92",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-05-04T20:11:35+00:00"
+            "time": "2018-05-07T21:49:09+00:00"
         },
         {
             "name": "coraxster/flysystem-aws-s3-v3-minio",

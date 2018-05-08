@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/system/backgroundvideo/randomone','System\BackGroundVideoController@randomone');
+Route::get('/5ewin/elolist/getallaccounts','Fewin\ELOListController@GetAllAccounts');
+Route::post('/5ewin/elolist/account','Fewin\ELOListController@store');
