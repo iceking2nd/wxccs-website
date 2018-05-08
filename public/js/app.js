@@ -1685,13 +1685,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         create: function create() {
+            var _this = this;
+
             var formData = {
                 domain_id: this.fewin_doamin_id,
                 steam_account: this.steam_account,
                 fewin_account: this.fewin_account
             };
             axios.post('/api/5ewin/elolist/account', formData).then(function (response) {
-                console.log(response.data.message);
+                _this.$router.push({ name: '5ewin_index' });
             });
         }
     }
@@ -1736,33 +1738,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 var accounts_data = {};
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
+        var _this = this;
+
         axios.get('/api/5ewin/elolist/getallaccounts').then(function (response) {
-            var accounts_data = response.data;
-            accounts_data.forEach(function (element, index) {
-                console.log(element.domain_id);
-                axios('https://app.5ewin.com/api/data/player/' + element.domain_id, {
-                    method: 'GET',
-                    mode: 'no-cors',
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        'Content-Type': 'application/json'
-                    }
-                }).then(function (response) {
-                    accounts[index].push(element);
-                    accounts[index].fewin_data = response.data;
-                });
-            });
+            _this.accounts = response.data;
         });
     },
     data: function data() {
         return {
-            accounts: []
+            accounts: [],
+            currentSort: 'name',
+            currentSortDir: 'asc'
         };
+    },
+
+    methods: {
+        sortby: function sortby(s) {
+            //if s == current sort, reverse
+            if (s === this.currentSort) {
+                this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
+            }
+            this.currentSort = s;
+            console.log(this.currentSort);
+            console.log(this.currentSortDir);
+        }
+    },
+    computed: {
+        sortedAccounts: function sortedAccounts() {
+            var _this2 = this;
+
+            return this.accounts.sort(function (a, b) {
+                var modifier = 1;
+                if (_this2.currentSortDir === 'desc') modifier = -1;
+                if (a[_this2.currentSort] < b[_this2.currentSort]) return -1 * modifier;
+                if (a[_this2.currentSort] > b[_this2.currentSort]) return 1 * modifier;
+                return 0;
+            });
+        }
     }
 });
 
@@ -5784,6 +5806,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 })));
 //# sourceMappingURL=bootstrap.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8aaec536\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/5ewin/elolist/index.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nth {\n    cursor:pointer;\n}\n", ""]);
+
+// exports
 
 
 /***/ }),
@@ -36686,40 +36723,127 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("table", { staticClass: "table" }, [
-      _vm._m(0),
+      _c("thead", [
+        _c("tr", [
+          _c(
+            "th",
+            {
+              on: {
+                click: function($event) {
+                  _vm.sortby("id")
+                }
+              }
+            },
+            [_vm._v("#")]
+          ),
+          _vm._v(" "),
+          _c(
+            "th",
+            {
+              on: {
+                click: function($event) {
+                  _vm.sortby("domain_id")
+                }
+              }
+            },
+            [_vm._v("域ID")]
+          ),
+          _vm._v(" "),
+          _c(
+            "th",
+            {
+              on: {
+                click: function($event) {
+                  _vm.sortby("username")
+                }
+              }
+            },
+            [_vm._v("ID")]
+          ),
+          _vm._v(" "),
+          _c(
+            "th",
+            {
+              on: {
+                click: function($event) {
+                  _vm.sortby("avatar_url")
+                }
+              }
+            },
+            [_vm._v("头像")]
+          ),
+          _vm._v(" "),
+          _c(
+            "th",
+            {
+              on: {
+                click: function($event) {
+                  _vm.sortby("elo")
+                }
+              }
+            },
+            [_vm._v("ELO")]
+          ),
+          _vm._v(" "),
+          _c(
+            "th",
+            {
+              on: {
+                click: function($event) {
+                  _vm.sortby("steam_account")
+                }
+              }
+            },
+            [_vm._v("STEAM账号")]
+          ),
+          _vm._v(" "),
+          _c(
+            "th",
+            {
+              on: {
+                click: function($event) {
+                  _vm.sortby("fewin_account")
+                }
+              }
+            },
+            [_vm._v("5ewin账号")]
+          )
+        ])
+      ]),
       _vm._v(" "),
       _c(
         "tbody",
-        _vm._l(_vm.accounts, function(account) {
+        _vm._l(_vm.sortedAccounts, function(account) {
           return _c("tr", { key: account.id }, [
             _c("td", [_vm._v(_vm._s(account.id))]),
             _vm._v(" "),
             _c("td", [
-              _c("a", {
-                attrs: {
-                  href:
-                    "https://www.5ewin.com/data/player/" + account.domain_id,
-                  target: "_blank"
-                }
-              }),
-              _vm._v(_vm._s(account.domain_id))
+              _c(
+                "a",
+                {
+                  attrs: {
+                    href:
+                      "https://www.5ewin.com/data/player/" + account.domain_id,
+                    target: "_blank"
+                  }
+                },
+                [_vm._v(_vm._s(account.domain_id))]
+              )
             ]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(account.fewin_data.data.user.username))]),
+            _c("td", [_vm._v(_vm._s(account.username))]),
             _vm._v(" "),
             _c("td", [
               _c("img", {
                 attrs: {
                   width: "40px",
                   height: "40px",
-                  src:
-                    "https://oss.5ewin.com/" +
-                    account.fewin_data.data.user.avatar_url
+                  src: "https://oss.5ewin.com/" + account.data.user.avatar_url
                 }
               })
             ]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(account.fewin_data.data.data.elo))]),
+            _c("td", [_vm._v(_vm._s(account.elo))]),
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(account.steam_account))]),
             _vm._v(" "),
@@ -36746,30 +36870,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("#")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("域ID")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("ID")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("头像")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("ELO")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("STEAM账号")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("5ewin账号")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -39571,6 +39672,33 @@ if (inBrowser && window.Vue) {
 
 /* harmony default export */ __webpack_exports__["a"] = (VueRouter);
 
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8aaec536\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/5ewin/elolist/index.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8aaec536\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/5ewin/elolist/index.vue");
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/vue-style-loader/lib/addStylesClient.js")("3ac6185a", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8aaec536\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue", function() {
+     var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8aaec536\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./index.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
 
@@ -51042,6 +51170,10 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__("./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-8aaec536\",\"scoped\":false,\"hasInlineConfig\":true}!./node_modules/vue-loader/lib/selector.js?type=styles&index=0!./resources/assets/js/components/5ewin/elolist/index.vue")
+}
 var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/5ewin/elolist/index.vue")
@@ -51050,7 +51182,7 @@ var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/templa
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -51246,6 +51378,7 @@ var routes = [{
     component: __webpack_require__("./resources/assets/js/components/welcome.vue")
 }, {
     path: '/5ewin/elolist',
+    name: '5ewin_index',
     component: __webpack_require__("./resources/assets/js/components/5ewin/elolist/index.vue")
 }, {
     path: '/5ewin/elolist/create',

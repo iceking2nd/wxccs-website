@@ -1,24 +1,29 @@
+<style>
+    th {
+        cursor:pointer;
+    }
+</style>
 <template>
     <div class="container">
         <table class="table">
             <thead>
             <tr>
-                <th>#</th>
-                <th>域ID</th>
-                <th>ID</th>
-                <th>头像</th>
-                <th>ELO</th>
-                <th>STEAM账号</th>
-                <th>5ewin账号</th>
+                <th @click="sortby('id')">#</th>
+                <th @click="sortby('domain_id')">域ID</th>
+                <th @click="sortby('username')">ID</th>
+                <th @click="sortby('avatar_url')">头像</th>
+                <th @click="sortby('elo')">ELO</th>
+                <th @click="sortby('steam_account')">STEAM账号</th>
+                <th @click="sortby('fewin_account')">5ewin账号</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="account in accounts" :key="account.id">
+            <tr v-for="account in sortedAccounts" :key="account.id">
                 <td>{{ account.id }}</td>
-                <td><a :href="'https://www.5ewin.com/data/player/' + account.domain_id" target="_blank"></a>{{ account.domain_id }}</td>
-                <td>{{ account.fewin_data.data.user.username }}</td>
-                <td><img width="40px" height="40px" :src="'https://oss.5ewin.com/' + account.fewin_data.data.user.avatar_url"></td>
-                <td>{{ account.fewin_data.data.data.elo }}</td>
+                <td><a :href="'https://www.5ewin.com/data/player/' + account.domain_id" target="_blank">{{ account.domain_id }}</a></td>
+                <td>{{ account.username }}</td>
+                <td><img width="40px" height="40px" :src="'https://oss.5ewin.com/' + account.data.user.avatar_url"></td>
+                <td>{{ account.elo }}</td>
                 <td>{{ account.steam_account }}</td>
                 <td>{{ account.fewin_account }}</td>
             </tr>
@@ -36,26 +41,36 @@
     export default {
         mounted() {
             axios.get('/api/5ewin/elolist/getallaccounts').then(response => {
-                let accounts_data = response.data
-                accounts_data.forEach(function (element,index){
-                    console.log(element.domain_id)
-                    axios('https://app.5ewin.com/api/data/player/' + element.domain_id,{
-                        method: 'GET',
-                        mode: 'no-cors',
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                            'Content-Type': 'application/json',
-                        }
-                }).then(response => {
-                        accounts[index].push(element)
-                        accounts[index].fewin_data = response.data
-                    })
-                })
+                this.accounts = response.data
             })
         },
         data() {
             return {
-                accounts : []
+                accounts : [],
+                currentSort:'name',
+                currentSortDir:'asc'
+            }
+        },
+        methods:{
+            sortby:function(s) {
+                //if s == current sort, reverse
+                if(s === this.currentSort) {
+                    this.currentSortDir = this.currentSortDir==='asc'?'desc':'asc';
+                }
+                this.currentSort = s;
+                console.log(this.currentSort)
+                console.log(this.currentSortDir)
+            }
+        },
+        computed:{
+            sortedAccounts:function() {
+                return this.accounts.sort((a,b) => {
+                    let modifier = 1;
+                    if(this.currentSortDir === 'desc') modifier = -1;
+                    if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+                    if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+                    return 0;
+                });
             }
         }
     }

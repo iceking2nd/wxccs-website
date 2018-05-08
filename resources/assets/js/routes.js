@@ -7,6 +7,7 @@ let routes = [
     },
     {
         path: '/5ewin/elolist',
+        name: '5ewin_index',
         component: require('./components/5ewin/elolist/index')
     },
     {

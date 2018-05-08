@@ -50,7 +50,7 @@
                     fewin_account : this.fewin_account
                 }
                 axios.post('/api/5ewin/elolist/account',formData).then(response => {
-                    console.log(response.data.message)
+                    this.$router.push({ name:'5ewin_index'})
                 })
             }
         }
