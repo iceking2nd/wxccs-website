@@ -22,7 +22,7 @@
                 <td>{{ account.id }}</td>
                 <td><a :href="'https://www.5ewin.com/data/player/' + account.domain_id" target="_blank">{{ account.domain_id }}</a></td>
                 <td>{{ account.username }}</td>
-                <td><img width="40px" height="40px" :src="'https://oss.5ewin.com/' + account.data.user.avatar_url"></td>
+                <td><img width="40px" height="40px" :src="'https://oss.5ewin.com/' + account.avatar_url"></td>
                 <td>{{ account.elo }}</td>
                 <td>{{ account.steam_account }}</td>
                 <td>{{ account.fewin_account }}</td>
