@@ -40,8 +40,8 @@ class ELOListController extends Controller
                     \Log::error("[status_code]" .$response->getStatusCode());
                     \Log::error("[response]".$response->getBody()->getContents());
                 }
-                $res = json_decode($response->getBody()->getContents());
-                if(!is_null($res)) $this->fe_result[$res->data->user->domain] = $res->data;
+                $res = json_decode($response->getBody()->getContents(),true);
+                if(!is_null($res)) $this->fe_result[$res['data']['user']['domain']] = $res['data'];
             },
             'rejected' => function ($reason,$index)
             {
@@ -54,9 +54,9 @@ class ELOListController extends Controller
 
         $accounts->map(function ($item)
         {
-            $item['username'] = $this->fe_result[$item->domain_id]->user->username;
-            $item['avatar_url'] = $this->fe_result[$item->domain_id]->user->avatar_url;
-            $item['elo'] = $this->fe_result[$item->domain_id]->data->elo;
+            $item['username'] = $this->fe_result[$item->domain_id]['user']['username'];
+            $item['avatar_url'] = $this->fe_result[$item->domain_id]['user']['avatar_url'];
+            $item['elo'] = $this->fe_result[$item->domain_id]['data']['elo'];
             $item['data'] = $this->fe_result[$item->domain_id];
             return $item;
         });
