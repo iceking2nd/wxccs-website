@@ -30,7 +30,32 @@
             </tbody>
         </table>
         <div class="row justify-content-center">
-            <router-link to="./elolist/create" class="col-sm-6 btn btn-success btn-block">添加新账号</router-link>
+            <div class="col-4">
+                <button type="button" class="btn btn-info float-left" @click="prevPage"><i class="fa fa-arrow-left" aria-hidden="true"></i> 上一页</button>
+            </div>
+            <div class="col-4">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">每页显示</div>
+                    </div>
+                    <select v-model="pageSize" class="custom-select mr-sm-2" id="perPageSelector">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-info float-right" @click="nextPage">下一页 <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+            </div>
+
+        </div>
+        <div class="row justify-content-center">
+            <router-link to="./elolist/create" class="col-sm-6 btn btn-success btn-block"><i class="fa fa-plus" aria-hidden="true"></i>
+                 添加新账号</router-link>
         </div>
     </div>
 </template>
@@ -48,7 +73,9 @@
             return {
                 accounts : [],
                 currentSort:'name',
-                currentSortDir:'asc'
+                currentSortDir:'asc',
+                pageSize:5,
+                currentPage:1
             }
         },
         methods:{
@@ -58,6 +85,12 @@
                     this.currentSortDir = this.currentSortDir==='asc'?'desc':'asc';
                 }
                 this.currentSort = s;
+            },
+            nextPage:function() {
+                if((this.currentPage*this.pageSize) < this.accounts.length) this.currentPage++;
+            },
+            prevPage:function() {
+                if(this.currentPage > 1) this.currentPage--;
             }
         },
         computed:{
@@ -68,6 +101,10 @@
                     if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
                     if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
                     return 0;
+                }).filter((row, index) => {
+                    let start = (this.currentPage-1)*this.pageSize;
+                    let end = this.currentPage*this.pageSize;
+                    if(index >= start && index < end) return true;
                 });
             }
         }

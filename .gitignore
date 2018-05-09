@@ -13,3 +13,7 @@ yarn-error.log
 .env
 /_ide_helper.php
 /.phpstorm.meta.php
+/public/mix-manifest.json
+/public/js/app.js
+/public/css/app.css
+/public/fonts/vendor/
