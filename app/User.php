@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Blog\Article;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -26,4 +27,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function blog_articles()
+    {
+        return $this->hasMany(Article::class,'author_id');
+    }
 }
