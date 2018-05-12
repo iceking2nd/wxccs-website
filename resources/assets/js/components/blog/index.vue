@@ -8,7 +8,7 @@
 
                 <div class="blog-post" v-for="article in articles" :key="article.id">
                     <h2 class="blog-post-title">{{ article.title }}</h2>
-                    <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
+                    <p class="blog-post-meta">{{ article.created_at }} by {{ article.author.name }}</p>
 
                     {{ article.content }}
                 </div><!-- /.blog-post -->
