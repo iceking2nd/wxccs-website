@@ -5,7 +5,7 @@
             <router-link class="p-2 text-dark" to="/blog">Blog</router-link>
             <router-link class="p-2 text-dark" to="/5ewin/elolist">5E ELOList</router-link>
         </nav>
-        <a class="btn btn-outline-primary">登陆</a>
+        <router-link class="btn btn-outline-primary" to="/login">登陆</router-link >
     </div>
 </template>
 

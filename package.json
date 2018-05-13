@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "font-awesome": "^4.7.0",
+        "vee-validate": "^2.0.9",
         "vue-router": "^3.0.1"
     }
 }

@@ -12,6 +12,7 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router';
 import router from './routes'
 import App from './components/app'
+import VeeValidate from 'vee-validate'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -20,6 +21,7 @@ import App from './components/app'
  */
 
 Vue.use(VueRouter);
+Vue.use(VeeValidate);
 Vue.component('app',App);
 
 const app = new Vue({
