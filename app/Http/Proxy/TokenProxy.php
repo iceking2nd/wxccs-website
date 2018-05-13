@@ -19,9 +19,11 @@ class TokenProxy
      * TokenProxy constructor.
      * @param $http_client
      */
-    public function __construct(Client $http_client)
+    public function __construct()
     {
-        $this->http_client = $http_client;
+        $this->http_client = new Client([
+            'base_uri' => 'http://127.0.0.1'
+        ]);
     }
 
     public function proxy($grantType,array $data=[])
@@ -32,11 +34,16 @@ class TokenProxy
             'grant_type' => $grantType,
         ]);
 
-        $response = $this->http_client->post('/oauth/token',[
-            'verify' => false,
-            'http_errors' => false,
-            'form_params' => $data
-        ]);
+        try
+        {
+            $response = $this->http_client->post('/oauth/token',[
+                'form_params' => $data
+            ]);
+        }
+        catch (\Exception $e)
+        {
+            dd($e);
+        }
 
         $token = json_decode((string)$response->getBody(),true);
 
@@ -44,5 +51,14 @@ class TokenProxy
             'token' => $token['access_token'],
             'expires_in' => $token['expires_in'],
         ])->cookie('refreshToken', $token['refresh_token'], 864000, null, null, false, true);
+    }
+
+    public function login($email,$password)
+    {
+        return $this->proxy('password',[
+            'username' => $email,
+            'password' => $password,
+            'scope' => ''
+        ]);
     }
 }
