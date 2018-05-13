@@ -43,14 +43,10 @@
         methods : {
             login() {
                 let formData = {
-                    client_id : 2,
-                    client_secret : 'PyfUY1cjnM9vN6WXODPpgHURSgJ3UbLEfUMjTNUz',
-                    grant_type : 'password',
-                    scope : '',
-                    username : this.email,
+                    email : this.email,
                     password : this.password
                 }
-                axios.post('/oauth/token',formData).then(response => {
+                axios.post('/api/login',formData).then(response => {
                     JWTToken.setToken(response.data.access_token)
                 })
             }

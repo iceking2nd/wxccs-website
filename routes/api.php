@@ -13,9 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
+
+Route::post('/login','Auth\LoginController@login');
 
 Route::get('/system/backgroundvideo/randomone','System\BackGroundVideoController@randomone');
 Route::get('/5ewin/elolist/getallaccounts','Fewin\ELOListController@GetAllAccounts');
