@@ -6,7 +6,7 @@
 
             <div class="col-md-6">
                 <input v-validate="{ rules : { required : true, email: true } }" v-model="email" id="email" type="email" class="form-control" name="email" placeholder="E-Mail" required autofocus>
-                <span class="help-block" v-show="errors.has('email')" :class="{'invalid-feedback' : errors.has('email')}">{{ errors.first('email') }}</span>
+                <span class="help-block help" v-show="errors.has('email')" :class="{'is-danger' : errors.has('email')}">{{ errors.first('email') }}</span>
             </div>
         </div>
 
@@ -15,7 +15,7 @@
 
             <div class="col-md-6">
                 <input v-validate="{ rules : { required : true, min: 8 } }" v-model="password" id="password" type="password" class="form-control" name="password" placeholder="密码" required>
-                <span class="help-block" v-show="errors.has('password')" :class="{'invalid-feedback' : errors.has('password')}">{{ errors.first('password') }}</span>
+                <span class="help-block help" v-show="errors.has('password')" :class="{'is-danger' : errors.has('password')}">{{ errors.first('password') }}</span>
             </div>
         </div>
 
@@ -31,6 +31,8 @@
 </template>
 
 <script>
+    import JWTToken from './../../helpers/jwt'
+
     export default {
         data() {
             return {
@@ -41,15 +43,15 @@
         methods : {
             login() {
                 let formData = {
-                    client_id : '',
-                    client_secret : '',
+                    client_id : 2,
+                    client_secret : 'PyfUY1cjnM9vN6WXODPpgHURSgJ3UbLEfUMjTNUz',
                     grant_type : 'password',
                     scope : '',
-                    email : this.email,
+                    username : this.email,
                     password : this.password
                 }
                 axios.post('/oauth/token',formData).then(response => {
-
+                    JWTToken.setToken(response.data.access_token)
                 })
             }
         }
