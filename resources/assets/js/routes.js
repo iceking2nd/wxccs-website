@@ -23,6 +23,11 @@ let routes = [
         name: 'blog_index',
         component: require('./components/blog/index')
     },
+    {
+        path: '/blog/article/:id',
+        name: 'blog_show_article',
+        component: require('./components/blog/show')
+    }
 ]
 
 export default new VueRouter({

@@ -17,6 +17,8 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        return $article;
+        $data = $article;
+        $data['author'] = $article->author;
+        return $data;
     }
 }
