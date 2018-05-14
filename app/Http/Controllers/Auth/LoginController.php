@@ -54,7 +54,7 @@ class LoginController extends Controller
     {
         $this->validateLogin(request());
 
-        return $this->proxy->login(\request('email'),\request('password'));
+        return $this->proxy->login(request('email'),request('password'));
     }
 
 }
