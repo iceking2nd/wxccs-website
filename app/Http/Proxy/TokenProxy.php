@@ -19,9 +19,9 @@ class TokenProxy
      * TokenProxy constructor.
      * @param $http_client
      */
-    public function __construct(Client $client)
+    public function __construct()
     {
-        $this->http_client = $client;
+        $this->http_client = new Client(['base_uri' => \Request::getSchemeAndHttpHost()]);
     }
 
     public function proxy($grantType,array $data=[])
@@ -34,7 +34,7 @@ class TokenProxy
 
         try
         {
-            $response = $this->http_client->post('http://127.0.0.1/oauth/token',[
+            $response = $this->http_client->post('/oauth/token',[
                 'form_params' => $data
             ]);
         }
