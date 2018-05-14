@@ -11,6 +11,7 @@ window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
 import router from './routes'
+import store from './store/index'
 import App from './components/app'
 import VeeValidate from 'vee-validate'
 
@@ -26,5 +27,6 @@ Vue.component('app',App);
 
 const app = new Vue({
     el: '#app',
-    router: router
+    router,
+    store
 });

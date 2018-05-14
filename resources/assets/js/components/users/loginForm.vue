@@ -47,7 +47,10 @@
                     password : this.password
                 }
                 axios.post('/api/login',formData).then(response => {
-                    JWTToken.setToken(response.data.access_token)
+                    JWTToken.setToken(response.data.token)
+                    this.$store.state.authenticated = true
+                }).catch(error => {
+                    console.log(error.response.data)
                 })
             }
         }
