@@ -36,13 +36,13 @@ class TokenProxy
 
         try
         {
-            $response = $this->http_client->post('http://localhost/oauth/token',[
+            $response = $this->http_client->post('http://webtest.dev.wxccs.org/oauth/token',[
                 'form_params' => $data
             ]);
         }
         catch (\Exception $e)
         {
-            dd($e);
+            dd($e->getMessage());
         }
 
         $token = json_decode((string)$response->getBody(),true);
