@@ -13,7 +13,9 @@ import VueRouter from 'vue-router';
 import router from './routes'
 import store from './store/index'
 import App from './components/app'
-import VeeValidate from 'vee-validate'
+
+import Vee_zh_CN from 'vee-validate/dist/locale/zh_CN'
+import VeeValidate, { Validator } from 'vee-validate'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -21,8 +23,13 @@ import VeeValidate from 'vee-validate'
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Validator.localize('zh_CN',Vee_zh_CN)
+
+
 Vue.use(VueRouter);
-Vue.use(VeeValidate);
+Vue.use(VeeValidate,{
+    locale: 'zh_CN'
+});
 Vue.component('app',App);
 
 const app = new Vue({

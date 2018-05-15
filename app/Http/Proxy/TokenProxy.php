@@ -35,6 +35,7 @@ class TokenProxy
         try
         {
             $response = $this->http_client->post('/oauth/token',[
+                'verify' => false,
                 'form_params' => $data
             ]);
         }
