@@ -13,9 +13,19 @@ import VueRouter from 'vue-router';
 import router from './routes'
 import store from './store/index'
 import App from './components/app'
+import jwtToken from './helpers/jwt'
 
 import Vee_zh_CN from 'vee-validate/dist/locale/zh_CN'
 import VeeValidate, { Validator } from 'vee-validate'
+
+axios.interceptors.request.use(function (config) {
+    if(jwtToken.getToken()){
+        config.headers['Authorization'] = 'Bearer ' + jwtToken.getToken()
+    }
+    return config;
+},function (error) {
+    return Promise.reject(error)
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

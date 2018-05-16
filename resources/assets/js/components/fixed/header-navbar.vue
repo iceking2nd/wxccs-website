@@ -5,12 +5,19 @@
             <router-link class="p-2 text-dark" to="/blog">Blog</router-link>
             <router-link class="p-2 text-dark" to="/5ewin/elolist">5E ELOList</router-link>
         </nav>
-        <router-link class="btn btn-outline-primary" to="/login">登陆</router-link >
+        <router-link v-if="user.authenticated" class="btn btn-outline-primary" to="/logout">登出</router-link>
+        <router-link v-if="!user.authenticated" class="btn btn-outline-primary" to="/login">登陆</router-link>
     </div>
 </template>
 
 <script>
-    export default {
+    import {mapState} from 'vuex'
 
+    export default {
+        computed:{
+            ...mapState({
+                user: state => state.AuthUser
+            })
+        }
     }
 </script>
