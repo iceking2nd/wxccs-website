@@ -13,15 +13,26 @@ export default {
             state.name = payload.user.name,
             state.email = payload.user.email,
             state.uid = payload.user.id
+        },
+        [types.UNSET_AUTH_USER](state){
+            state.authenticated = false,
+            state.name = null,
+            state.email = null,
+            state.uid = null
         }
     },
     actions : {
         setAuthUser({commit,dispatch}) {
-            axios.get('/api/user').then(response => {
+            return axios.get('/api/user').then(response => {
                 commit({
                     type: types.SET_AUTH_USER,
                     user: response.data
                 })
+            })
+        },
+        unsetAuthUser({commit}){
+            commit({
+                type: types.UNSET_AUTH_USER,
             })
         }
     }

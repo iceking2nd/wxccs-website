@@ -5,7 +5,7 @@
             <router-link class="p-2 text-dark" to="/blog">Blog</router-link>
             <router-link class="p-2 text-dark" to="/5ewin/elolist">5E ELOList</router-link>
         </nav>
-        <router-link v-if="user.authenticated" class="btn btn-outline-primary" to="/logout">登出</router-link>
+        <li @click="logout" v-if="user.authenticated" class="btn btn-outline-primary"><a>登出</a></li>
         <router-link v-if="!user.authenticated" class="btn btn-outline-primary" to="/login">登陆</router-link>
     </div>
 </template>
@@ -18,6 +18,15 @@
             ...mapState({
                 user: state => state.AuthUser
             })
+        },
+        methods:{
+            logout(){
+                this.$store.dispatch('logoutRequest').then(response => {
+                    this.$router.push({name:'blog_index'})
+                }).catch(error => {
+                    console.log(error)
+                })
+            }
         }
     }
 </script>

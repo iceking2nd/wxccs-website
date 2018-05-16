@@ -18,6 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/login','Auth\LoginController@login');
+Route::post('/logout','Auth\LoginController@logout');
+
 
 Route::get('/system/backgroundvideo/randomone','System\BackGroundVideoController@randomone');
 Route::get('/5ewin/elolist/getallaccounts','Fewin\ELOListController@GetAllAccounts');

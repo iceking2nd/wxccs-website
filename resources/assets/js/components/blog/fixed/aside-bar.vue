@@ -1,5 +1,8 @@
 <template>
     <aside class="col-md-4 blog-sidebar">
+        <div class="p-3">
+            <router-link v-if="user.authenticated" class="btn btn-info" :to="{ name : 'blog_create_article' }">发布新文章</router-link>
+        </div>
         <div class="p-3 mb-3 bg-light rounded">
             <h4 class="font-italic">About</h4>
             <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
@@ -20,10 +23,16 @@
 
 <script>
     import ArchivesList from './archives-list'
+    import {mapState} from 'vuex'
 
     export default {
         components:{
             ArchivesList
+        },
+        computed:{
+            ...mapState({
+                user : state => state.AuthUser
+            })
         }
     }
 </script>

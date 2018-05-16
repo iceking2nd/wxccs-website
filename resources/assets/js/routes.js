@@ -12,7 +12,7 @@ let routes = [
         path: '/login',
         name: 'login',
         component: require('./components/users/login'),
-        meta: {}
+        meta: {requiresGuest: true}
     },
     {
         path: '/5ewin/elolist',
@@ -53,7 +53,7 @@ const router = new VueRouter({
 router.beforeEach((to,from,next) => {
     if (to.meta.requiresAuth)
     {
-        if(Store.state.authenticated || jwtToken.getToken())
+        if(Store.state.AuthUser.authenticated || jwtToken.getToken())
         {
             return next()
         }
@@ -62,10 +62,19 @@ router.beforeEach((to,from,next) => {
             return next({name:'login'})
         }
     }
-    else
+    if (to.meta.requiresGuest)
     {
-        return next()
+        if (Store.state.AuthUser.authenticated || jwtToken.getToken())
+        {
+            return next({name:'blog_index'})
+        }
+        else
+        {
+            return next()
+        }
     }
+
+    return next()
 })
 
 export default router

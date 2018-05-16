@@ -9,7 +9,14 @@
 
 <script>
     import HeaderNavbar from './fixed/header-navbar'
+    import jwtToken from './../helpers/jwt'
+
     export default {
+        created(){
+            if(jwtToken.getToken()){
+                this.$store.dispatch('setAuthUser')
+            }
+        },
         components:{
             HeaderNavbar
         }
