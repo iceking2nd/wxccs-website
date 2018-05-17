@@ -71,7 +71,6 @@
                             {
                                 this.bag.add('password','电子邮件和密码不相符','auth')
                             }
-                            console.log(error.response)
                         })
                     }
                 })

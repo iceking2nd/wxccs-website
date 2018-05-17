@@ -14,7 +14,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-right">用户名</label>
 
             <div class="col-md-6">
-                <input v-validate="{ rules : { required : true } }" data-vv-as="用户名" v-model="name" id="name" type="text" class="form-control" name="password" placeholder="用户名">
+                <input v-validate="{ rules : { required : true } }" data-vv-as="用户名" v-model="name" id="name" type="text" class="form-control" name="name" placeholder="用户名">
                 <span class="help-block help" v-show="errors.has('name')" :class="{'text-danger' : errors.has('name')}">{{ errors.first('name') }}</span>
             </div>
         </div>
@@ -44,7 +44,7 @@
                 },
                 set(value) {
                     this.$store.commit({
-                        type: ,
+                        type: types.UPDATE_PROFILE_NAME,
                         value: value
                     })
                 }
@@ -52,19 +52,29 @@
             email: {
                 get() {
                     return this.$store.state.AuthUser.email;
+                },
+                set(value) {
+                    this.$store.commit({
+                        type: types.UPDATE_PROFILE_EMAIL,
+                        value: value
+                    })
                 }
             }
         },
         methods : {
             updateProfile() {
-                const formData = {
-                    name: this.name,
-                    email: this.name
-                }
-                this.$store.dispatch('updateProfileRequest',formData).then(response => {
-                    this.$router.push({name:'profile'})
-                }).catch(error => {
-
+                this.$validator.validateAll().then((result) => {
+                    if (result) {
+                        const formData = {
+                            name: this.name,
+                            email: this.email
+                        }
+                        this.$store.dispatch('updateProfileRequest',formData).then(response => {
+                            this.$router.push({name:'profile'})
+                        }).catch(error => {
+                            console.log(error)
+                        })
+                    }
                 })
             }
         }

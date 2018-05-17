@@ -8,6 +8,12 @@ export default {
         uid: null,
     },
     mutations:{
+        [types.UPDATE_PROFILE_NAME](state,payload){
+            state.name = payload.value
+        },
+        [types.UPDATE_PROFILE_EMAIL](state,payload){
+            state.email = payload.value
+        },
         [types.SET_AUTH_USER](state, payload){
             state.authenticated = true,
             state.name = payload.user.name,
