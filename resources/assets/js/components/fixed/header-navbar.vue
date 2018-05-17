@@ -24,7 +24,7 @@
                 this.$store.dispatch('logoutRequest').then(response => {
                     this.$router.push({name:'blog_index'})
                 }).catch(error => {
-                    console.log(error)
+                    console.log(error.response)
                 })
             }
         }

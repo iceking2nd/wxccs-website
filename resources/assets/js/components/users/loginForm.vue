@@ -16,6 +16,7 @@
             <div class="col-md-6">
                 <input v-validate="{ rules : { required : true, min: 8 } }" data-vv-as="密码" v-model="password" id="password" type="password" class="form-control" name="password" placeholder="密码">
                 <span class="help-block help" v-show="errors.has('password')" :class="{'text-danger' : errors.has('password')}">{{ errors.first('password') }}</span>
+                <span class="help-block help" v-if="mismatchError" :class="{'text-danger' : bag.has('password:auth')}">{{ bag.first('password:auth') }}</span>
             </div>
         </div>
 
@@ -31,13 +32,28 @@
 </template>
 
 <script>
-    import JWTToken from './../../helpers/jwt'
+
+    import {ErrorBag} from 'vee-validate'
 
     export default {
         data() {
             return {
                 email : '',
                 password : '',
+                bag : new ErrorBag()
+            }
+        },
+        computed:{
+            mismatchError(){
+                return this.bag.has('password:auth') && !this.errors.has('password')
+            }
+        },
+        watch:{
+            password(){
+                if (this.bag.has('password:auth'))
+                {
+                    this.bag.remove('password')
+                }
             }
         },
         methods : {
@@ -49,7 +65,14 @@
                             password : this.password
                         }
                         this.$store.dispatch('loginRequest',formData).then(response => {
+                            console.log(response)
                             this.$router.push({name:'blog_index'})
+                        }).catch(error => {
+                            if (error.response.status === 421)
+                            {
+                                this.bag.add('password','电子邮件和密码不相符','auth')
+                            }
+                            console.log(error.response)
                         })
                     }
                 })

@@ -32,17 +32,10 @@ class TokenProxy
             'grant_type' => $grantType,
         ]);
 
-        try
-        {
-            $response = $this->http_client->post('/oauth/token',[
+        $response = $this->http_client->post('/oauth/token',[
                 'verify' => false,
                 'form_params' => $data
-            ]);
-        }
-        catch (\Exception $e)
-        {
-            dd($e->getMessage());
-        }
+        ]);
 
         $token = json_decode((string)$response->getBody(),true);
 
@@ -54,11 +47,21 @@ class TokenProxy
 
     public function login($email,$password)
     {
-        return $this->proxy('password',[
-            'username' => $email,
-            'password' => $password,
-            'scope' => ''
-        ]);
+        if (auth()->attempt(['email' => $email , 'password' => $password]))
+        {
+            return $this->proxy('password',[
+                'username' => $email,
+                'password' => $password,
+                'scope' => ''
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status' => false,
+                'message' => 'Credentials not match'
+            ],421);
+        }
     }
 
     public function logout()
