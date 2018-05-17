@@ -15,6 +15,31 @@ let routes = [
         meta: {requiresGuest: true}
     },
     {
+        path: '/profile',
+        component: require('./components/users/ProfileWrapper'),
+        children: [
+            {
+                path: '',
+                name: 'profile',
+                component: require('./components/users/ProfileShow'),
+                meta: {requiresAuth: true}
+            },
+            {
+                path: '/edit',
+                name: 'profile.editProfile',
+                component: require('./components/users/ProfileEdit'),
+                meta: {requiresAuth: true}
+            },
+            {
+                path: '/password',
+                name: 'profile.changePassword',
+                component: require('./components/users/ChangePassword'),
+                meta: {requiresAuth: true}
+            },
+        ],
+        meta: {requiresAuth: true}
+    },
+    {
         path: '/5ewin/elolist',
         name: '5ewin_index',
         component: require('./components/5ewin/elolist/index'),

@@ -65,8 +65,7 @@
                             password : this.password
                         }
                         this.$store.dispatch('loginRequest',formData).then(response => {
-                            console.log(response)
-                            this.$router.push({name:'blog_index'})
+                            this.$router.push({name:'profile'})
                         }).catch(error => {
                             if (error.response.status === 421)
                             {

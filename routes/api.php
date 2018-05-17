@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/login','Auth\LoginController@login');
 Route::post('/logout','Auth\LoginController@logout');
+Route::post('/token/refresh','Auth\LoginController@refresh');
+Route::post('/user/profile/update','System\ProfileController@update')->middleware('auth:api');
 
 
 Route::get('/system/backgroundvideo/randomone','System\BackGroundVideoController@randomone');
