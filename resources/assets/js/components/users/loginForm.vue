@@ -1,5 +1,5 @@
 <template>
-    <form method="POST" @submit.prevent="login">
+    <form @submit.prevent="login">
 
         <div class="form-group row">
             <label for="email" class="col-sm-4 col-form-label text-md-right">电子邮件</label>
