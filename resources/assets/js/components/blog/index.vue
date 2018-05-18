@@ -1,40 +1,24 @@
 <template>
-    <main role="main" class="container">
-        <div class="row">
-            <div class="col-md-8 blog-main">
-                <h3 class="pb-3 mb-4 font-italic border-bottom">
-                    梅尔加尼
-                </h3>
+    <div class="container">
+      <div class="blog-post" v-for="article in articles" :key="article.id">
+            <h2 class="blog-post-title"><router-link :to="{ name: 'blog_show_article', params: { id: article.id }}">{{ article.title }}</router-link></h2>
+            <p class="blog-post-meta">{{ article.created_at }} by {{ article.author.name }}</p>
 
-                <div class="blog-post" v-for="article in articles" :key="article.id">
-                    <h2 class="blog-post-title"><router-link :to="{ name: 'blog_show_article', params: { id: article.id }}">{{ article.title }}</router-link></h2>
-                    <p class="blog-post-meta">{{ article.created_at }} by {{ article.author.name }}</p>
-
-                    <div style="height: 500px; overflow:hidden; overflow-x:hidden" v-html="article.content"></div>
-                    <hr>
-                    <router-link class="float-right" :to="{ name: 'blog_show_article', params: { id: article.id }}">阅读全文</router-link>
-                    <div class="space"></div>
-                </div><!-- /.blog-post -->
-
-                <nav class="blog-pagination">
-                    <a class="btn btn-outline-primary" href="#">Older</a>
-                    <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
-                </nav>
-
-            </div><!-- /.blog-main -->
-            <aside-bar></aside-bar>
-        </div><!-- /.row -->
-
-    </main>
+            <div style="height: 500px; overflow:hidden; overflow-x:hidden" v-html="article.content"></div>
+            <hr>
+            <router-link class="float-right" :to="{ name: 'blog_show_article', params: { id: article.id }}">阅读全文</router-link>
+            <div class="space"></div>
+      </div><!-- /.blog-post -->
+        <nav class="blog-pagination">
+            <a class="btn btn-outline-primary" href="#">Older</a>
+            <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
+        </nav>
+    </div>
 </template>
 
 <script>
-    import AsideBar from './fixed/aside-bar'
 
     export default {
-        components: {
-            AsideBar
-        },
         mounted() {
             axios.get('/api/blog/article').then(response => {
                 this.articles = response.data.data

@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Shanghai',
 
     /*
     |--------------------------------------------------------------------------
@@ -163,6 +163,7 @@ return [
         App\Providers\MinioStorageServiceProvider::class,
 
         Laravel\Passport\PassportServiceProvider::class,
+        Overtrue\LaravelUEditor\UEditorServiceProvider::class,
 
     ],
 

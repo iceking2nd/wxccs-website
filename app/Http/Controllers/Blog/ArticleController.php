@@ -9,9 +9,14 @@ use App\Http\Controllers\Controller;
 
 class ArticleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->only(['store']);
+    }
+
     public function index()
     {
-        $articles = Article::with('author')->paginate(10);
+        $articles = Article::with('author')->orderBy('created_at','desc')->paginate(10);
         return $articles;
     }
 
@@ -20,5 +25,47 @@ class ArticleController extends Controller
         $data = $article;
         $data['author'] = $article->author;
         return $data;
+    }
+
+    public function store(Request $request)
+    {
+        $author_id = auth()->guard('api')->user()->id;
+        try
+        {
+            $article = Article::create([
+                'author_id' => $author_id,
+                'title' => $request->get('title'),
+                'content' => $request->get('content'),
+            ]);
+            return response()->json($article->toArray());
+        }
+        catch (\Exception $exception)
+        {
+            return response()->json($exception,500);
+        }
+    }
+
+    public function update(Article $article,Request $request)
+    {
+        $author_id = auth()->guard('api')->user()->id;
+        if ($article->id == $author_id)
+        {
+            try
+            {
+                $article->update([
+                    'title' => $request->get('title'),
+                    'content' => $request->get('content'),
+                ]);
+                return response()->json($article->toArray());
+            }
+            catch (\Exception $exception)
+            {
+                return response()->json($exception,500);
+            }
+        }
+        else
+        {
+            return response()->json(['message' => 'You are not the author of this article!'],403);
+        }
     }
 }

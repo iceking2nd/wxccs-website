@@ -1,54 +1,61 @@
 <template>
-    <main role="main" class="container">
-        <div class="row">
-            <div class="col-md-8 blog-main">
-                <h3 class="pb-3 mb-4 font-italic border-bottom">
-                    梅尔加尼
-                </h3>
+    <form @submit.prevent="ArticleCreate">
+        <div class="blog-post">
+            <h2 class="blog-post-title">
+                标题<input v-validate="'required'" data-vv-as="标题" v-model="title" id="title" name="title" type="text" placeholder="标题" autofocus>
+            </h2>
+            <div class="blog-post-meta" v-show="errors.has('title')">
+                <span class="help-block help" v-show="errors.has('title')" :class="{'text-danger' : errors.has('title')}">{{ errors.first('title') }}</span>
+            </div>
+            <div>
+                <u-editor v-model="content" :config="UEconfig"></u-editor>
+                <hr>
+            </div>
+            <div>
+                <button type="submit" :disabled="errors.any()" class="btn btn-primary">
+                    发布文章
+                </button>
+            </div>
+        </div><!-- /.blog-post -->
+    </form>
 
-                <form method="POST">
-                    <div class="blog-post">
-                        <h2 class="blog-post-title">
-                            <input type="text">
-                        </h2>
-                        <div>
-                            <textarea></textarea>
-                        </div>
-                    </div><!-- /.blog-post -->
-                </form>
-
-<!--
-                <nav class="blog-pagination">
-                    <a class="btn btn-outline-primary" href="#">Older</a>
-                    <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
-                </nav>
--->
-
-            </div><!-- /.blog-main -->
-            <aside-bar></aside-bar>
-        </div><!-- /.row -->
-
-    </main>
 </template>
 
 <script>
-    import AsideBar from './fixed/aside-bar'
+    import UEditor from 'vue-ueditor-wrap'
 
     export default {
         components: {
-            AsideBar
+            UEditor
         },
         mounted() {
 
         },
         data() {
             return {
-                article : {}
+                title: null,
+                content: '',
+                UEconfig: {
+                    UEDITOR_HOME_URL: '/vendor/ueditor/',
+                    serverUrl: '/ueditor/server',
+                }
             }
         },
         methods:{
             ArticleCreate() {
-
+                this.$validator.validateAll().then((result) => {
+                    if (result) {
+                        let formData = {
+                            title : this.title,
+                            content : this.content
+                        }
+                        axios.post('/api/blog/article',formData).then(response => {
+                            this.$router.push({ name: 'blog_show_article', params: { id: response.data.id }})
+                        }).catch(error => {
+                            console.log(error)
+                        })
+                    }
+                })
             }
         }
     }

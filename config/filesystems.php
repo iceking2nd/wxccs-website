@@ -73,6 +73,15 @@ return [
             'endpoint' => env('MINIO_ENDPOINT')
         ],
 
+        'ueditor' => [
+            'driver' => 'minio',
+            'key' => env('MINIO_KEY'),
+            'secret' => env('MINIO_SECRET'),
+            'region' => 'us-east-1',
+            'bucket' => env('MINIO_UE_BUCKET'),
+            'endpoint' => env('MINIO_ENDPOINT')
+        ],
+
     ],
 
 ];

@@ -29,5 +29,5 @@ Route::get('/5ewin/elolist/getallaccounts','Fewin\ELOListController@GetAllAccoun
 Route::post('/5ewin/elolist/account','Fewin\ELOListController@store');
 
 Route::group([ 'prefix' => 'blog', 'as' => 'blog.' ],function (){
-    Route::resource('article','Blog\ArticleController');
+    Route::resource('article','Blog\ArticleController')->only(['index','show','store','update']);
 });

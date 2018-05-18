@@ -15,6 +15,37 @@ let routes = [
         meta: {requiresGuest: true}
     },
     {
+        path: '/blog',
+        component: require('./components/blog/fixed/wrapper'),
+        children: [
+            {
+                path: '/',
+                name: 'blog_index',
+                component: require('./components/blog/index'),
+                meta: {}
+            },
+            {
+                path: '/article/create',
+                name: 'blog_create_article',
+                component: require('./components/blog/create'),
+                meta: {requiresAuth: true}
+            },
+            {
+                path: '/article/:id/edit',
+                name: 'blog_edit_article',
+                component: require('./components/blog/edit'),
+                meta: {requiresAuth: true}
+            },
+            {
+                path: '/article/:id',
+                name: 'blog_show_article',
+                component: require('./components/blog/show'),
+                meta: {}
+            }
+        ],
+        meta: {}
+    },
+    {
         path: '/profile',
         component: require('./components/users/ProfileWrapper'),
         children: [
@@ -50,24 +81,6 @@ let routes = [
         component: require('./components/5ewin/elolist/create'),
         meta: {}
     },
-    {
-        path: '/blog',
-        name: 'blog_index',
-        component: require('./components/blog/index'),
-        meta: {}
-    },
-    {
-        path: '/blog/article/create',
-        name: 'blog_create_article',
-        component: require('./components/blog/create'),
-        meta: {requiresAuth: true}
-    },
-    {
-        path: '/blog/article/:id',
-        name: 'blog_show_article',
-        component: require('./components/blog/show'),
-        meta: {}
-    }
 ]
 
 const router = new VueRouter({
