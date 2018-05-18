@@ -51,8 +51,8 @@
                 this.$validator.validateAll().then((result) => {
                     if (result) {
                         let formData = {
-                            title : this.title,
-                            content : this.content
+                            title : this.article.title,
+                            content : this.article.content
                         }
                         axios.patch('/api/blog/article/' + this.$route.params.id,formData).then(response => {
                             this.$router.push({ name: 'blog_show_article', params: { id: response.data.id }})

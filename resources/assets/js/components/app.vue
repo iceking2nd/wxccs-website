@@ -1,6 +1,7 @@
 <template>
     <div>
         <header-navbar></header-navbar>
+        <notification></notification>
         <transition name="fade" mode="out-in">
             <router-view></router-view>
         </transition>
@@ -11,6 +12,7 @@
     import HeaderNavbar from './fixed/header-navbar'
     import jwtToken from './../helpers/jwt'
     import Cookie from 'js-cookie'
+    import Notification from './fixed/notification'
 
     export default {
         created(){
@@ -23,7 +25,8 @@
             }
         },
         components:{
-            HeaderNavbar
+            HeaderNavbar,
+            Notification
         }
     }
 </script>

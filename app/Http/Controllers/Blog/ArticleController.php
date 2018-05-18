@@ -11,7 +11,7 @@ class ArticleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api')->only(['store']);
+        $this->middleware('auth:api')->only(['store','update']);
     }
 
     public function index()
@@ -47,8 +47,8 @@ class ArticleController extends Controller
 
     public function update(Article $article,Request $request)
     {
-        $author_id = auth()->guard('api')->user()->id;
-        if ($article->id == $author_id)
+        $user_id = auth()->guard('api')->user()->id;
+        if ($article->author_id == $user_id)
         {
             try
             {
