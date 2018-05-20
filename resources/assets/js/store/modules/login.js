@@ -5,6 +5,7 @@ export default {
         loginRequest({dispatch},formData) {
             return axios.post('/api/login',formData).then(response => {
                 dispatch('loginSuccess',response.data)
+                dispatch('showNotification',{level:'success',msg:'登录成功！'})
             })
         },
         loginSuccess({dispatch},tokenResponse) {
@@ -16,6 +17,7 @@ export default {
             return axios.post('/api/logout').then(response => {
                 jwtToken.removeToken()
                 dispatch('unsetAuthUser')
+                dispatch('showNotification',{level:'info',msg:'登出成功！'})
             })
         }
     }

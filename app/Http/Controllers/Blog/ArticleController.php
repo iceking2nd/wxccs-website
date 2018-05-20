@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blog;
 
+use App\Http\Resources\Blog\ArticleResource;
 use App\Models\Blog\Article;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::with('author')->orderBy('created_at','desc')->paginate(10);
-        return $articles;
+        return ArticleResource::collection($articles);
     }
 
     public function show(Article $article)

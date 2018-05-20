@@ -2,7 +2,7 @@
     <div class="container">
         <div class="notification">
             <transition name="fade" mode="in-out">
-                <div class="alert alert-dismissible fade show" :class="notificationLevel"
+                <div class="alert alert-dismissible fade show" :class="getNotificationLevel"
                     v-if="msg"
                     @click="hideNotification">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -24,7 +24,10 @@
             ...mapState({
                 level: state => state.Notification.level,
                 msg: state => state.Notification.msg
-            })
+            }),
+            getNotificationLevel() {
+                return 'alert-' + this.level
+            }
         },
         methods: {
             ...mapActions([

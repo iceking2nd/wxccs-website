@@ -10,24 +10,122 @@
             <div class="space"></div>
       </div><!-- /.blog-post -->
         <nav class="blog-pagination">
-            <a class="btn btn-outline-primary" href="#">Older</a>
-            <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
+            <button :class="{'disabled' : !prevPage}" :disabled="!prevPage" class="btn btn-outline-primary" @click.prevent="goToPrev">上一页</button>
+            {{ paginatonCount }}
+            <button :class="{'disabled' : !nextPage}" :disabled="!nextPage" class="btn btn-outline-secondary" @click.prevent="goToNext">下一页</button>
         </nav>
     </div>
 </template>
 
 <script>
+    import axios from 'axios'
+
+    const getArticles = ( page , callback ) => {
+        const params = { page };
+
+        axios
+            .get('/api/blog/article', {params})
+            .then(response => {
+                callback(null,response.data)
+            }).catch(error => {
+                callback(error,error.response.data)
+        });
+    };
 
     export default {
-        mounted() {
-            axios.get('/api/blog/article').then(response => {
-                this.articles = response.data.data
-            })
-        },
         data() {
             return {
-                articles : []
+                articles : [],
+                meta : null,
+                links : {
+                    first : null,
+                    last : null,
+                    next : null,
+                    prev : null
+                },
+                error : null
             }
+        },
+        computed: {
+            nextPage() {
+                if (! this.meta || this.meta.current_page === this.meta.last_page) {
+                    return;
+                }
+
+                return this.meta.current_page + 1;
+            },
+            prevPage() {
+                if (! this.meta || this.meta.current_page === 1) {
+                    return;
+                }
+
+                return this.meta.current_page - 1;
+            },
+            paginatonCount() {
+                if (! this.meta) {
+                    return;
+                }
+
+                const { current_page, last_page } = this.meta;
+
+                return `${current_page} of ${last_page}`;
+            },
+        },
+        beforeRouteEnter (to, from, next) {
+            getArticles(to.query.page, (err, data) => {
+                next(vm => vm.setData(err, data));
+            });
+        },
+        // when route changes and this component is already rendered,
+        // the logic will be slightly different.
+        beforeRouteUpdate (to, from, next) {
+            this.articles = this.links = this.meta = null
+            getArticles(to.query.page, (err, data) => {
+                this.setData(err, data);
+                next();
+            });
+        },
+        methods: {
+            fetchData() {
+                this.error = this.articles = null;
+                this.loading = true;
+                axios
+                    .get('/api/blog/article')
+                    .then(response => {
+                        this.loading = false;
+                        this.articles = response.data;
+                    }).catch(error => {
+                    this.loading = false;
+                    this.error = error.response.data.message || error.message;
+                });
+            },
+            goToNext() {
+                this.$router.push({
+                    query: {
+                        page: this.nextPage,
+                    },
+                });
+            },
+            goToPrev() {
+                this.$router.push({
+                    name: 'blog_index',
+                    query: {
+                        page: this.prevPage,
+                    }
+                });
+            },
+            setData(err, { data: articles, links, meta }) {
+                if (err) {
+                    this.error = err.toString();
+                } else {
+                    this.articles = articles;
+                    this.links = links;
+                    this.meta = meta;
+                }
+            },
+        },
+        created() {
+            this.fetchData();
         }
     }
 </script>

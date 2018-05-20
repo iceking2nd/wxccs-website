@@ -5,7 +5,9 @@
         </div>
         <div class="p-3 mb-3 bg-light rounded">
             <h4 class="font-italic">About</h4>
-            <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+            <p class="mb-0">
+                一个84年出生的稍微会点PHP、稍微会点系统管理、喜欢玩CSGO的网络工程师。
+            </p>
         </div>
 
         <archives-list></archives-list>

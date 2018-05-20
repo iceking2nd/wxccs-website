@@ -66,7 +66,6 @@
                         }
                         this.$store.dispatch('loginRequest',formData).then(response => {
                             this.$router.push({name:'profile'})
-                            dispatch('showNotification',{level:'info',msg:'登录成功！'})
                         }).catch(error => {
                             if (error.response.status === 421)
                             {
