@@ -17,8 +17,8 @@ class ArticleController extends Controller
 
     public function index()
     {
-        $articles = Article::with('author')->orderBy('created_at','desc')->paginate(10);
-        return ArticleResource::collection($articles);
+        $articles = Article::with('author')->orderBy('created_at','desc')->paginate(10)->appends(request()->except('page'));
+        return $articles;
     }
 
     public function show(Article $article)
@@ -68,5 +68,25 @@ class ArticleController extends Controller
         {
             return response()->json(['message' => 'You are not the author of this article!'],403);
         }
+    }
+
+    public function archiveslist()
+    {
+        $list = array();
+        $articles_by_date = Article::all()->groupBy(function($date) {
+            return Carbon::parse($date->created_at)->format('Y-m');
+        })->toArray();
+        foreach ($articles_by_date as $key => $value)
+        {
+            array_push(
+                $list,
+                [
+                    'year' => Carbon::parse($key)->format('Y'),
+                    'month' => Carbon::parse($key)->format('m'),
+                    'friendly' => Carbon::parse($key)->format('Y年m月'),
+                ]
+            );
+        }
+        return response()->json($list);
     }
 }
