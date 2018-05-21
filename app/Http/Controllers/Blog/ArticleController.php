@@ -73,7 +73,7 @@ class ArticleController extends Controller
     public function archiveslist()
     {
         $list = array();
-        $articles_by_date = Article::all()->groupBy(function($date) {
+        $articles_by_date = Article::orderBy('created_at','desc')->groupBy(function($date) {
             return Carbon::parse($date->created_at)->format('Y-m');
         })->toArray();
         foreach ($articles_by_date as $key => $value)
