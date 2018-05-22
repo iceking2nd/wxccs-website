@@ -22,9 +22,7 @@ class ArticleController extends Controller
         {
             $start_date = Carbon::create(request('year'),request('month'),1,0,0,0);
             $end_date = Carbon::create(request('year'),request('month'),1,0,0,0)->addMonth(1);
-            $articles->whereHas('author', function ($query) use ($start_date,$end_date) {
-                $query->whereBetween('created_at',[$start_date,$end_date]);
-            });
+            $articles->whereBetween('created_at',[$start_date,$end_date]);
         }
         $articles->orderBy('created_at','desc');
         $articles = $articles->paginate(10)->appends(request()->except('page'));
