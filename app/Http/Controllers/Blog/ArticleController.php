@@ -17,7 +17,17 @@ class ArticleController extends Controller
 
     public function index()
     {
-        $articles = Article::with('author')->orderBy('created_at','desc')->paginate(10)->appends(request()->except('page'));
+        $articles = Article::with('author');
+        if (is_numeric(request('year')) && is_numeric(request('month')))
+        {
+            $start_date = Carbon::create(request('year'),request('month'),1,0,0,0);
+            $end_date = Carbon::create(request('year'),request('month'),1,0,0,0)->addMonth(1);
+            $articles->whereHas('author', function ($query) use ($start_date,$end_date) {
+                $query->whereBetween('created_at',[$start_date,$end_date]);
+            });
+        }
+        $articles->orderBy('created_at','desc');
+        $articles = $articles->paginate(10)->appends(request()->except('page'));
         return $articles;
     }
 

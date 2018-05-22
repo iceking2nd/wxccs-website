@@ -24,9 +24,6 @@
             logout(){
                 this.$store.dispatch('logoutRequest').then(response => {
                     this.$router.push({name:'blog_index'})
-                    dispatch('showNotification',{level:'info',msg:'登出成功！'})
-                }).catch(error => {
-                    dispatch('showNotification',{level:'danger',msg:'登出失败！原因:'+error.response.message})
                 })
             }
         }

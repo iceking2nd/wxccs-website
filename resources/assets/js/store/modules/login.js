@@ -18,6 +18,8 @@ export default {
                 jwtToken.removeToken()
                 dispatch('unsetAuthUser')
                 dispatch('showNotification',{level:'info',msg:'登出成功！'})
+            }).catch(error => {
+                dispatch('showNotification',{level:'danger',msg:'登出失败！原因:'+error.response.message})
             })
         }
     }
