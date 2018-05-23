@@ -46,6 +46,12 @@ let routes = [
         meta: {}
     },
     {
+        path: '/download',
+        name: 'download_index',
+        component: require('./components/download/index'),
+        meta: {}
+    },
+    {
         path: '/profile',
         component: require('./components/users/ProfileWrapper'),
         children: [

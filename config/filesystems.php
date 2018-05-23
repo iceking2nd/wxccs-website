@@ -82,6 +82,15 @@ return [
             'endpoint' => env('MINIO_ENDPOINT')
         ],
 
+        'download' => [
+            'driver' => 'minio',
+            'key' => env('MINIO_KEY'),
+            'secret' => env('MINIO_SECRET'),
+            'region' => 'us-east-1',
+            'bucket' => env('MINIO_DL_BUCKET'),
+            'endpoint' => env('MINIO_ENDPOINT')
+        ],
+
     ],
 
 ];

@@ -32,3 +32,7 @@ Route::group([ 'prefix' => 'blog', 'as' => 'blog.' ],function (){
     Route::get('article/archiveslist','Blog\ArticleController@archiveslist');
     Route::resource('article','Blog\ArticleController')->only(['index','show','store','update']);
 });
+
+Route::group(['prefix' => 'download', 'as' => 'download.'],function (){
+    Route::get('/','Download\DownloadComtroller@index')->name('index');
+});
