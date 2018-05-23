@@ -17,7 +17,12 @@ class DownloadComtroller extends Controller
         foreach ($files as $key => $file)
         {
             $expires_in = ceil(($disk->size($file)/1024)/500)+60;
-            $data[$key] = ['filename' => $file , 'meta' => $disk->getMetadata($file) , 'download_url' => $disk->temporaryUrl($file,Carbon::now()->addSeconds($expires_in)) , 'expires_in' => $expires_in ];
+            $data[$key] = [
+                'filename' => $file,
+                'timestamp' => $disk->getTimestamp($file),
+                'size' => $disk->size($file),
+                'download_url' => $disk->temporaryUrl($file,Carbon::now()->addSeconds($expires_in)),
+                'expires_in' => $expires_in ];
         }
         return response()->json($data);
     }

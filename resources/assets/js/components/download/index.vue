@@ -9,15 +9,15 @@
             <thead>
             <tr>
                 <th @click="sortby('filename')">文件名</th>
-                <th>大小</th>
-                <th>上传时间</th>
+                <th @click="sortby('size')">大小</th>
+                <th @click="sortby('timestamp')">上传时间</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="file in sortedDownloads" :key="file.filename">
                 <td><a :href="file.download_url">{{ file.filename }}</a></td>
-                <td>{{ Math.round((file.meta.size/1048576)*100)/100 }} MB</td>
-                <td>{{ getLocalTime(file.meta.timestamp) }}</td>
+                <td>{{ Math.round((file.size/1048576)*100)/100 }} MB</td>
+                <td>{{ getLocalTime(file.timestamp) }}</td>
             </tr>
             </tbody>
         </table>
@@ -31,9 +31,6 @@
                         <div class="input-group-text">每页显示</div>
                     </div>
                     <select v-model="pageSize" class="custom-select mr-sm-2" id="perPageSelector">
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
                         <option value="30">30</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
@@ -60,9 +57,9 @@
         data() {
             return {
                 downloads : [],
-                currentSort:'name',
-                currentSortDir:'asc',
-                pageSize:5,
+                currentSort:'timestamp',
+                currentSortDir:'desc',
+                pageSize:30,
                 currentPage:1
             }
         },
@@ -91,7 +88,7 @@
                 i = t.getMinutes();
                 s = t.getSeconds();
                 // 可根据需要在这里定义时间格式
-                return y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d)+' '+(h<10?'0'+h:h)+':'+(i<10?'0'+i:i)+':'+(s<10?'0'+s:s);
+                return y+'年'+(m<10?'0'+m:m)+'月'+(d<10?'0'+d:d)+'日 '+(h<10?'0'+h:h)+':'+(i<10?'0'+i:i)+':'+(s<10?'0'+s:s);
             }
         },
         computed:{
