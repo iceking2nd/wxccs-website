@@ -26,6 +26,8 @@ Route::post('/user/password/update','System\PasswordController@update')->middlew
 
 Route::get('/system/backgroundvideo/randomone','System\BackGroundVideoController@randomone');
 Route::get('/5ewin/elolist/getallaccounts','Fewin\ELOListController@GetAllAccounts');
+Route::get('/5ewin/elolist/getdomainidonly','Fewin\ELOListController@getAllAccountsDomainIDOnly');
+Route::get('/5ewin/elolist/proxy/{domain_id}','Fewin\ELOListController@fedataproxy');
 Route::post('/5ewin/elolist/account','Fewin\ELOListController@store');
 
 Route::group([ 'prefix' => 'blog', 'as' => 'blog.' ],function (){

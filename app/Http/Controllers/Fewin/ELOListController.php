@@ -14,6 +14,10 @@ class ELOListController extends Controller
 
     public function GetAllAccounts(){
 
+        $env_error_reporting = error_reporting();
+
+        error_reporting(0);
+
         $accounts = Account::all();
 
         $client = new Client(['verify' => false]);
@@ -60,7 +64,44 @@ class ELOListController extends Controller
             return $item;
         });
 
+        error_reporting($env_error_reporting);
+
         return response()->json($accounts);
+    }
+
+    public function getAllAccountsDomainIDOnly()
+    {
+        $accounts = Account::all(['id','domain_id','steam_account','fewin_account']);
+        $accounts->map(function ($item)
+        {
+            $item['elo'] = null;
+            $item['username'] = null;
+            $item['avatar_url'] = null;
+        });
+        return response()->json($accounts);
+    }
+
+    public function fedataproxy($domain_id)
+    {
+        $env_error_reporting = error_reporting();
+
+        error_reporting(0);
+
+        $client = new Client(['verify' => false]);
+
+        $response = $client->get('https://app.5ewin.com/api/data/player/'. $domain_id);
+
+        $data = json_decode($response->getBody()->getContents(),true)['data'];
+
+        $response_data = [
+            'elo' => $data['data']['elo'],
+            'username' => $data['user']['username'],
+            'avatar_url' => $data['user']['avatar_url']
+        ];
+
+        error_reporting($env_error_reporting);
+
+        return response()->json($response_data);
     }
 
     public function store(Request $request)
