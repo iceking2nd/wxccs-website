@@ -96,7 +96,8 @@ class ELOListController extends Controller
         $response_data = [
             'elo' => $data['data']['elo'],
             'username' => $data['user']['username'],
-            'avatar_url' => $data['user']['avatar_url']
+            'avatar_url' => $data['user']['avatar_url'],
+            'match_total' => $data['data']['match_total'],
         ];
 
         error_reporting($env_error_reporting);
