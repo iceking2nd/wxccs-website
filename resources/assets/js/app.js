@@ -35,6 +35,16 @@ axios.interceptors.request.use(function (config) {
 
 Validator.localize('zh_CN',Vee_zh_CN)
 
+Array.prototype.delayedForEach = function(callback, timeout, thisArg){
+    var i = 0,
+        l = this.length,
+        self = this,
+        caller = function(){
+            callback.call(thisArg || self, self[i], i, self);
+            (++i < l) && setTimeout(caller, timeout);
+        };
+    caller();
+};
 
 Vue.use(VueRouter);
 Vue.use(VeeValidate,{

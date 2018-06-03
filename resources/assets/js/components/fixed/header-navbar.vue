@@ -8,7 +8,7 @@
         </nav>
         <router-link v-if="user.authenticated" class="btn btn-outline-primary" to="/profile">个人中心</router-link>
         <li @click="logout" v-if="user.authenticated" class="btn btn-outline-primary"><a>登出</a></li>
-        <router-link v-if="!user.authenticated" class="btn btn-outline-primary" to="/login">登陆</router-link>
+        <router-link v-if="!user.authenticated" class="btn btn-outline-primary" to="/login">登录</router-link>
     </div>
 </template>
 

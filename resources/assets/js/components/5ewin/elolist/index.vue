@@ -2,22 +2,31 @@
     th {
         cursor:pointer;
     }
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+    }
+    .fade-enter, .fade-leave-active {
+        opacity: 0
+    }
 </style>
 <template>
     <div class="container">
-        <div v-show="loading">
-            <div class="row justify-content-center">
-                Loading...
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-6">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" :style="{ width: progress + '%' }" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">{{progress}}%</div>
+        <transition name="fade">
+            <div v-show="loading">
+                <div class="row justify-content-center">
+                    Loading...
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" :style="{ width: progress + '%' }" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">{{progress}}%</div>
+                        </div>
                     </div>
                 </div>
+                <div class="space"></div>
             </div>
-        </div>
-        <div v-show="!loading">
+        </transition>
+        <div>
             <table class="table">
                 <thead>
                 <tr>
@@ -36,7 +45,7 @@
                     <td>{{ account.id }}</td>
                     <td><a :href="'https://www.5ewin.com/data/player/' + account.domain_id" target="_blank">{{ account.domain_id }}</a></td>
                     <td>{{ account.username }}</td>
-                    <td><img width="40px" height="40px" v-show="account.avatar_url !== null" :src="'https://oss.5ewin.com/' + account.avatar_url"></td>
+                    <td><img width="40px" height="40px" :src="account.avatar_url"></td>
                     <td>{{ account.elo }}</td>
                     <td>{{ account.match_total }}</td>
                     <td>{{ account.steam_account }}</td>
@@ -81,23 +90,20 @@
         mounted() {
             axios.get('/api/5ewin/elolist/getdomainidonly').then(response => {
                 this.accounts = response.data
-                this.accounts.forEach(function (account) {
+                this.accounts.delayedForEach(function (account) {
                     axios.get('/api/5ewin/elolist/proxy/' + account.domain_id).then(response => {
                         account.elo = response.data.elo
                         account.username = response.data.username
                         account.avatar_url = response.data.avatar_url
                         account.match_total = Number(response.data.match_total)
                         this.processedRecord++
+                        if (this.processedRecord >= this.accounts.length) {
+                            this.processedRecord = 0
+                            this.loading = false
+                        }
                     })
-                },this)
+                },100,this)
             })
-
-            setTimeout(function(){},10000)
-
-            if (this.processedRecord >= this.accounts.length) {
-                this.processedRecord = 0
-                this.loading = false
-            }
         },
         data() {
             return {
