@@ -62,7 +62,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text">每页显示</div>
                         </div>
-                        <select v-model="pageSize" class="custom-select mr-sm-2" id="perPageSelector">
+                        <select v-model="pageSize" @change="currentPage = 1" class="custom-select mr-sm-2" id="perPageSelector">
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="15">15</option>
