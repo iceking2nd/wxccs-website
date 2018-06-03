@@ -86,6 +86,7 @@
                         account.elo = response.data.elo
                         account.username = response.data.username
                         account.avatar_url = response.data.avatar_url
+                        account.match_total = response.data.match_total
                         this.processedRecord++
                     })
                 },this)
