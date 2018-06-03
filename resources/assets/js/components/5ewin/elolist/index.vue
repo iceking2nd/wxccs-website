@@ -36,7 +36,7 @@
                     <td>{{ account.id }}</td>
                     <td><a :href="'https://www.5ewin.com/data/player/' + account.domain_id" target="_blank">{{ account.domain_id }}</a></td>
                     <td>{{ account.username }}</td>
-                    <td><img width="40px" height="40px" :src="'https://oss.5ewin.com/' + account.avatar_url"></td>
+                    <td><img width="40px" height="40px" v-show="account.avatar_url !== null" :src="'https://oss.5ewin.com/' + account.avatar_url"></td>
                     <td>{{ account.elo }}</td>
                     <td>{{ account.match_total }}</td>
                     <td>{{ account.steam_account }}</td>
@@ -86,7 +86,7 @@
                         account.elo = response.data.elo
                         account.username = response.data.username
                         account.avatar_url = response.data.avatar_url
-                        account.match_total = response.data.match_total
+                        account.match_total = Number(response.data.match_total)
                         this.processedRecord++
                     })
                 },this)
