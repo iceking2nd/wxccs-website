@@ -11,10 +11,14 @@
 
 <script>
     import { mapState } from 'vuex'
+    import jwtToken from '../../helpers/jwt'
 
     export default {
         created(){
-            this.$store.dispatch('setAuthUser')
+            if(jwtToken.getToken())
+            {
+                this.$store.dispatch('setAuthUser')
+            }
         },
         computed:{
             ...mapState({
