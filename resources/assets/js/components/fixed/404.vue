@@ -9,7 +9,7 @@
             <div class="col-sm-12">
                 <h1 class="uno_title">OPPS !!</h1>
                 <p class="uno_title_sec">您要找的页面飞走了！</p>
-                <a href="#">
+                <a href="/">
                     <button type="button" name="button" class="btn btn-light uno_btn">点击我回到主页</button>
                 </a>
             </div>
