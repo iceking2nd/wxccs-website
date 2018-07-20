@@ -19,10 +19,37 @@
     </div>
 </template>
 
-<style media="screen">
-    .btn_link {
-        border-radius: 30px;
-        border: 2px solid white;
+<style>
+    body {
+        background: #faa823;
+    }
+    .uno_main_body {
+        text-align: center;
+    }
+
+    .uno_hero_img {
+        margin-top: 4%;
+    }
+    .uno_title {
+        font-family: 'Gloria Hallelujah', cursive;
+    }
+    .uno_title_sec{
+        font-family: 'Neucha', cursive;
+    }
+    .uno_btn {
+        cursor: pointer;
+        font-family: 'Neucha', cursive;
+    }
+    @-webkit-keyframes hero_img {
+        0%, 100% {
+            margin-top: 15px;
+        }
+        50% {
+            margin-top: 25px;
+        }
+    }
+    .uno_hero_img{
+        -webkit-animation: hero_img 2100ms infinite;
     }
 </style>
 
