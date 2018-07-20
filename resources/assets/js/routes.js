@@ -87,6 +87,10 @@ let routes = [
         component: require('./components/5ewin/elolist/create'),
         meta: {}
     },
+    {
+        path: '*',
+        component: require('./components/fixed/404')
+    },
 ]
 
 const router = new VueRouter({
