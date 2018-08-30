@@ -102,7 +102,7 @@
                             this.loading = false
                         }
                     })
-                },500,this)
+                },200,this)
             })
         },
         data() {
