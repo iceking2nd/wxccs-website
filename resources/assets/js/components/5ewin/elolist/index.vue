@@ -53,10 +53,10 @@
                 </tr>
                 </tbody>
             </table>
-            <div v-show="!loading" class="row justify-content-center">
-                <div class="col-4">已定级账号数：{{ rankedAccounts }}</div>
+            <div class="row justify-content-center">
+                <div class="col-4">已定级账号数：{{ rankedAccountsCount }}</div>
                 <div class="col-4">账号总数：{{ accounts.length }}</div>
-                <div class="col-4">未定级账号数：{{ accounts.length - rankedAccounts }}</div>
+                <div class="col-4">未定级账号数：{{ accounts.length - rankedAccountsCount }}</div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-4">
@@ -107,6 +107,10 @@
                             this.loading = false
                         }
                     })
+                    if (account.match_total >= 10)
+                    {
+                        this.rankedAccountsCount++;
+                    }
                 },100,this)
             })
         },
@@ -118,7 +122,8 @@
                 pageSize:5,
                 currentPage:1,
                 loading:true,
-                processedRecord:0
+                processedRecord:0,
+                rankedAccountsCount:0
             }
         },
         methods:{
@@ -152,16 +157,6 @@
             },
             progress:function () {
                 return Math.round(this.processedRecord / this.accounts.length * 100)
-            },
-
-            rankedAccounts:function () {
-                let i = 0;
-                this.accounts.forEach(function (item,index) {
-                    if(item.match_total >= 10){
-                        i++;
-                    }
-                })
-                return i;
             }
         }
     }
