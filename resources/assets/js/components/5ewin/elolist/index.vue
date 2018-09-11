@@ -155,7 +155,7 @@
 
             rankedAccounts:function () {
                 let i = 0;
-                accounts.forEach(function (item,index) {
+                this.accounts.forEach(function (item,index) {
                     if(item.match_total >= 10){
                         i++;
                     }
