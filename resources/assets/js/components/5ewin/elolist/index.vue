@@ -53,7 +53,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="row justify-content-center">
+            <div v-show="!loading" class="row justify-content-center">
                 <div class="col-4">已定级账号数：{{ rankedAccounts }}</div>
                 <div class="col-4">账号总数：{{ accounts.length }}</div>
                 <div class="col-4">未定级账号数：{{ accounts.length - rankedAccounts }}</div>
