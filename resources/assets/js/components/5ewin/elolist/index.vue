@@ -94,23 +94,23 @@
     export default {
         mounted() {
             axios.get('/api/5ewin/elolist/getdomainidonly').then(response => {
-                this.accounts = response.data
+                this.accounts = response.data;
                 this.accounts.delayedForEach(function (account) {
                     axios.get('/api/5ewin/elolist/proxy/' + account.domain_id).then(response => {
-                        account.elo = response.data.elo
-                        account.username = response.data.username
-                        account.avatar_url = response.data.avatar_url
-                        account.match_total = Number(response.data.match_total)
-                        this.processedRecord++
+                        account.elo = response.data.elo;
+                        account.username = response.data.username;
+                        account.avatar_url = response.data.avatar_url;
+                        account.match_total = Number(response.data.match_total);
+                        this.processedRecord++;
+                        if (account.match_total >= 10)
+                        {
+                            this.rankedAccountsCount++;
+                        }
                         if (this.processedRecord >= this.accounts.length) {
-                            this.processedRecord = 0
-                            this.loading = false
+                            this.processedRecord = 0;
+                            this.loading = false;
                         }
                     })
-                    if (account.match_total >= 10)
-                    {
-                        this.rankedAccountsCount++;
-                    }
                 },100,this)
             })
         },
