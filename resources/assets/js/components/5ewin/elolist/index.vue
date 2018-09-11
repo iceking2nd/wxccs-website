@@ -54,6 +54,10 @@
                 </tbody>
             </table>
             <div class="row justify-content-center">
+                <div class="col-6">账号总数：{{ accounts.length }}</div>
+                <div class="col-6">已定级账号数：{{ rankedAccounts }}</div>
+            </div>
+            <div class="row justify-content-center">
                 <div class="col-4">
                     <button type="button" class="btn btn-info float-left" @click="prevPage"><i class="fa fa-arrow-left" aria-hidden="true"></i> 上一页</button>
                 </div>
@@ -147,6 +151,16 @@
             },
             progress:function () {
                 return Math.round(this.processedRecord / this.accounts.length * 100)
+            },
+
+            rankedAccounts:function () {
+                let i = 0;
+                accounts.forEach(function (item,index) {
+                    if(item.match_total >= 10){
+                        i++;
+                    }
+                })
+                return i;
             }
         }
     }
