@@ -35,6 +35,7 @@
                     <th @click="sortby('username')">ID</th>
                     <th @click="sortby('avatar_url')">头像</th>
                     <th @click="sortby('elo')">ELO</th>
+                    <th @click="sortby('credit2')">信用分</th>
                     <th @click="sortby('match_total')">赛季比赛场次</th>
                     <th @click="sortby('steam_account')">STEAM账号</th>
                     <th @click="sortby('fewin_account')">5ewin账号</th>
@@ -47,6 +48,7 @@
                     <td>{{ account.username }}</td>
                     <td><img width="40px" height="40px" :src="account.avatar_url"></td>
                     <td>{{ account.elo }}</td>
+                    <td>{{ account.credit2 }}</td>
                     <td>{{ account.match_total }}</td>
                     <td>{{ account.steam_account }}</td>
                     <td>{{ account.fewin_account }}</td>

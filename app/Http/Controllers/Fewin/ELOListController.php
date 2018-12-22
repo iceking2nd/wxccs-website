@@ -98,6 +98,7 @@ class ELOListController extends Controller
             'username' => $data['user']['username'],
             'avatar_url' => 'https://oss.5ewin.com/' . $data['user']['avatar_url'],
             'match_total' => $data['data']['match_total'],
+            'credit2' => $data['user']['credit2'],
         ];
 
         error_reporting($env_error_reporting);
