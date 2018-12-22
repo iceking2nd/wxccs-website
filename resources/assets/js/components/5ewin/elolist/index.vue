@@ -103,6 +103,7 @@
                         account.username = response.data.username;
                         account.avatar_url = response.data.avatar_url;
                         account.match_total = Number(response.data.match_total);
+                        account.credit2 = Number(response.data.credit2);
                         this.processedRecord++;
                         if (account.match_total >= 10)
                         {
