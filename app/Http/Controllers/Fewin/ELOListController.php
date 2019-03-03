@@ -111,8 +111,7 @@ class ELOListController extends Controller
 
     public function getotp($id)
     {
-
-        $otpauth_uri = Account::findOrFail($id)->value("otpauth_uri");
+        $otpauth_uri = Account::findOrFail($id)->otpauth_uri;
         $secret_base32 = explode("?",$otpauth_uri)[1];
         $secret_base32 = explode("&",$secret_base32)[0];
         $secret_base32 = explode("=",$secret_base32)[1];
