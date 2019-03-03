@@ -24,6 +24,10 @@
                                 <label for="fewin_account">5EWIN账号</label>
                                 <input type="text" v-model="fewin_account" class="form-control" id="fewin_account" placeholder="5EWIN账号">
                             </div>
+                            <div class="form-group">
+                                <label for="fewin_account">OTPAUTH URL</label>
+                                <input type="text" v-model="fewin_account" class="form-control" id="otpauth_uri" placeholder="OTPAUTH URL">
+                            </div>
                             <button type="submit" class="btn btn-primary">确认提交</button>
                         </form>
                     </div>
@@ -47,7 +51,8 @@
                 let formData = {
                     domain_id : this.fewin_doamin_id,
                     steam_account : this.steam_account,
-                    fewin_account : this.fewin_account
+                    fewin_account : this.fewin_account,
+                    otpauth_uri : this.otpauth_uri,
                 }
                 axios.post('/api/5ewin/elolist/account',formData).then(response => {
                     this.$router.push({ name:'5ewin_index'})
