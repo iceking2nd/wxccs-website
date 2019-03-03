@@ -147,7 +147,7 @@
                 if(this.currentPage > 1) this.currentPage--;
             },
             getotp:function (id,index) {
-                axios.get("/api/5ewin/elilist/getotp/" + id).then(response => {
+                axios.get("/api/5ewin/elolist/getotp/" + id).then(response => {
                     this.$set(this.accounts[index],'code_string',response.data.codeimg);
                     this.$forceUpdate();
                 })
