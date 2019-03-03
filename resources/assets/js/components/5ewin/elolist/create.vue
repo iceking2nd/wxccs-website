@@ -26,7 +26,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="fewin_account">OTPAUTH URL</label>
-                                <input type="text" v-model="fewin_account" class="form-control" id="otpauth_uri" placeholder="OTPAUTH URL">
+                                <input type="text" v-model="otpauth_uri" class="form-control" id="otpauth_uri" placeholder="OTPAUTH URL">
                             </div>
                             <button type="submit" class="btn btn-primary">确认提交</button>
                         </form>
@@ -43,7 +43,8 @@
             return {
                 fewin_doamin_id : '',
                 steam_account : '',
-                fewin_account : ''
+                fewin_account : '',
+                otpauth_uri : '',
             }
         },
         methods:{
