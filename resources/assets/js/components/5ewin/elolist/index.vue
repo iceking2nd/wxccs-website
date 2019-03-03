@@ -39,10 +39,11 @@
                     <th @click="sortby('match_total')">赛季比赛场次</th>
                     <th @click="sortby('steam_account')">STEAM账号</th>
                     <th @click="sortby('fewin_account')">5ewin账号</th>
+                    <th>令牌</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="account in sortedAccounts" :key="account.id">
+                <tr v-for="(account, index) in sortedAccounts" :key="account.id">
                     <td>{{ account.id }}</td>
                     <td><a :href="'https://www.5ewin.com/data/player/' + account.domain_id" target="_blank">{{ account.domain_id }}</a></td>
                     <td>{{ account.username }}</td>
@@ -52,6 +53,7 @@
                     <td>{{ account.match_total }}</td>
                     <td>{{ account.steam_account }}</td>
                     <td>{{ account.fewin_account }}</td>
+                    <td><img v-bind:id="'codeimg_' + account.id" v-if="account.otpauth_uri" :src="account.code_string" width="40px" height="100%" @click="getotp(account.id,index)"></td>
                 </tr>
                 </tbody>
             </table>
@@ -104,6 +106,7 @@
                         account.avatar_url = response.data.avatar_url;
                         account.match_total = Number(response.data.match_total);
                         account.credit2 = Number(response.data.credit2);
+                        account.code_string = "/images/refresh.gif";
                         this.processedRecord++;
                         if (account.match_total >= 10)
                         {
@@ -114,7 +117,7 @@
                             this.loading = false;
                         }
                     })
-                },100,this)
+                },50,this)
             })
         },
         data() {
@@ -142,7 +145,13 @@
             },
             prevPage:function() {
                 if(this.currentPage > 1) this.currentPage--;
-            }
+            },
+            getotp:function (id,index) {
+                axios.get("http://wxccs.devel/api/5ewin/elilist/getotp/" + id).then(response => {
+                    this.$set(this.accounts[index],'code_string',response.data.codeimg);
+                    this.$forceUpdate();
+                })
+            },
         },
         computed:{
             sortedAccounts:function() {
@@ -160,7 +169,7 @@
             },
             progress:function () {
                 return Math.round(this.processedRecord / this.accounts.length * 100)
-            }
+            },
         }
     }
 </script>

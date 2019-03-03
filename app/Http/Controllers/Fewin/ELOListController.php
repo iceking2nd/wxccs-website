@@ -7,6 +7,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use ParagonIE\ConstantTime\Encoding;
+use SteamTotp\SteamTotp;
 
 class ELOListController extends Controller
 {
@@ -71,9 +73,10 @@ class ELOListController extends Controller
 
     public function getAllAccountsDomainIDOnly()
     {
-        $accounts = Account::all(['id','domain_id','steam_account','fewin_account']);
+        $accounts = Account::all(['id','domain_id','steam_account','fewin_account','otpauth_uri']);
         $accounts->map(function ($item)
         {
+            $item['otpauth_uri'] = is_null($item['otpauth_uri'])?false:true;
             $item['elo'] = null;
             $item['username'] = null;
             $item['avatar_url'] = null;
@@ -106,9 +109,36 @@ class ELOListController extends Controller
         return response()->json($response_data);
     }
 
+    public function getotp($id)
+    {
+
+        $otpauth_uri = Account::findOrFail($id)->value("otpauth_uri");
+        $secret_base32 = explode("?",$otpauth_uri)[1];
+        $secret_base32 = explode("&",$secret_base32)[0];
+        $secret_base32 = explode("=",$secret_base32)[1];
+        $otp = SteamTotp::getAuthCode(Encoding::base32DecodeUpper($secret_base32),SteamTotp::getTimeOffset());
+        return response()->json(["codeimg" => "data:image/png;base64, " . $this->b64img($otp,4,40,20)]);
+    }
+
     public function store(Request $request)
     {
         Account::create($request->all());
         return response()->json(['message' => 'create successful']);
+    }
+
+    private function b64img( $str, $fs=10, $w=250, $h=200, $b=array( 'r'=>255, 'g'=>255, 'b'=>255 ), $t=array('r'=>0, 'g'=>0, 'b'=>0) ){
+        $tmp=tempnam( sys_get_temp_dir(), 'img' );
+
+        $image = imagecreate( $w, $h );
+        $bck = imagecolorallocate( $image, $b['r'], $b['g'], $b['b'] );
+        $txt = imagecolorallocate( $image, $t['r'], $t['g'], $t['b'] );
+
+        imagestring( $image, $fs, 0, 0, $str, $txt );
+        imagepng( $image, $tmp );
+        imagedestroy( $image );
+
+        $data=base64_encode( file_get_contents( $tmp ) );
+        @unlink( $tmp );
+        return $data;
     }
 }
