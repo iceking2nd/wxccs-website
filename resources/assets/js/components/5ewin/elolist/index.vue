@@ -148,7 +148,7 @@
             },
             getotp:function (id,index) {
                 axios.get("/api/5ewin/elolist/getotp/" + id).then(response => {
-                    this.$set(this.accounts[index],'code_string',response.data.codeimg);
+                    this.$set(this.accounts[index+(this.currentPage-1)*this.pageSize],'code_string',response.data.codeimg);
                     this.$forceUpdate();
                 })
             },
