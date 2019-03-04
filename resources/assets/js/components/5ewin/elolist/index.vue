@@ -150,6 +150,10 @@
                 axios.get("/api/5ewin/elolist/getotp/" + id).then(response => {
                     this.$set(this.accounts[index+(this.currentPage-1)*this.pageSize],'code_string',response.data.codeimg);
                     this.$forceUpdate();
+                    setTimeout(function () {
+                        this.$set(this.accounts[index+(this.currentPage-1)*this.pageSize],'code_string',"/images/refresh.gif");
+                        this.$forceUpdate();
+                    },30000);
                 })
             },
         },
