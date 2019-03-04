@@ -149,7 +149,7 @@
                 this.currentSort = s;
             },
             nextPage:function() {
-                if((this.currentPage*this.pageSize) < this.accounts.length) this.currentPage++;
+                if((this.currentPage*this.pageSize) < Object.keys(this.accounts).length) this.currentPage++;
             },
             prevPage:function() {
                 if(this.currentPage > 1) this.currentPage--;
