@@ -76,7 +76,16 @@ class ELOListController extends Controller
         $accounts = Account::all(['id','domain_id','steam_account','fewin_account','otpauth_uri']);
         $accounts->map(function ($item)
         {
-            $item['otpauth_uri'] = is_null($item['otpauth_uri'])?false:true;
+            if (is_null($item['otpauth_uri']))
+            {
+                $item['otpauth_uri'] = false;
+            }
+            else
+            {
+                $query = parse_url($item['otpauth_uri'],PHP_URL_QUERY);
+                parse_str($query,$query);
+                $item['otpauth_uri'] = isset($query['secret'])?true:false;
+            }
             $item['elo'] = null;
             $item['username'] = null;
             $item['avatar_url'] = null;
@@ -112,9 +121,9 @@ class ELOListController extends Controller
     public function getotp($id)
     {
         $otpauth_uri = Account::findOrFail($id)->otpauth_uri;
-        $secret_base32 = explode("?",$otpauth_uri)[1];
-        $secret_base32 = explode("&",$secret_base32)[0];
-        $secret_base32 = explode("=",$secret_base32)[1];
+        $secret_base32 = parse_url($otpauth_uri,PHP_URL_QUERY);
+        parse_str($secret_base32,$secret_base32);
+        $secret_base32 = $secret_base32['secret'];
         $otp = SteamTotp::getAuthCode(Encoding::base32DecodeUpper($secret_base32),SteamTotp::getTimeOffset());
         return response()->json(["codeimg" => "data:image/png;base64, " . $this->b64img($otp,4,40,20)]);
     }
