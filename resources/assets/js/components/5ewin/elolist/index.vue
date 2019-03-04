@@ -43,7 +43,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(account, index) in sortedAccounts" :key="account.id">
+                <tr v-for="(account) in sortedAccounts" :key="account.id">
                     <td>{{ account.id }}</td>
                     <td><a :href="'https://www.5ewin.com/data/player/' + account.domain_id" target="_blank">{{ account.domain_id }}</a></td>
                     <td>{{ account.username }}</td>
@@ -53,14 +53,14 @@
                     <td>{{ account.match_total }}</td>
                     <td>{{ account.steam_account }}</td>
                     <td>{{ account.fewin_account }}</td>
-                    <td><img v-bind:id="'codeimg_' + account.id" v-if="account.otpauth_uri" :src="account.code_string" width="40px" height="100%" @click="getotp(account.id,index)"></td>
+                    <td><img v-bind:id="'codeimg_' + account.id" v-if="account.otpauth_uri" :src="account.code_string" width="40px" height="100%" @click="getotp(account.id)"></td>
                 </tr>
                 </tbody>
             </table>
             <div class="row justify-content-center">
                 <div class="col-4">已定级账号数：{{ rankedAccountsCount }}</div>
-                <div class="col-4">账号总数：{{ accounts.length }}</div>
-                <div class="col-4">未定级账号数：{{ accounts.length - rankedAccountsCount }}</div>
+                <div class="col-4">账号总数：{{ Object.keys(accounts).length }}</div>
+                <div class="col-4">未定级账号数：{{ Object.keys(accounts).length - rankedAccountsCount }}</div>
             </div>
             <div class="row justify-content-center">
                 <div class="col-4">
@@ -98,31 +98,39 @@
     export default {
         mounted() {
             axios.get('/api/5ewin/elolist/getdomainidonly').then(response => {
-                this.accounts = response.data;
-                this.accounts.delayedForEach(function (account) {
-                    axios.get('/api/5ewin/elolist/proxy/' + account.domain_id).then(response => {
-                        account.elo = response.data.elo;
-                        account.username = response.data.username;
-                        account.avatar_url = response.data.avatar_url;
-                        account.match_total = Number(response.data.match_total);
-                        account.credit2 = Number(response.data.credit2);
-                        account.code_string = "/images/refresh.gif";
-                        this.processedRecord++;
-                        if (account.match_total >= 10)
-                        {
-                            this.rankedAccountsCount++;
-                        }
-                        if (this.processedRecord >= this.accounts.length) {
-                            this.processedRecord = 0;
-                            this.loading = false;
-                        }
-                    })
-                },50,this)
+                if(response.status !== 200) return Promise.reject(new Error(response.status));
+                let accounts = response.data;
+                let ps = [];
+                for (let i = 0; i < Object.keys(accounts).length; i+=1){
+                    let id = accounts[i].id;
+                    this.accounts[id] = accounts[i];
+                    ps.push(new Promise(resolve=>setTimeout(resolve, 50*parseInt(i))).then(()=>{
+                        axios.get('/api/5ewin/elolist/proxy/' + accounts[i].domain_id).then(response => {
+                            if(response.status !== 200) return Promise.reject(new Error(response.status));
+
+                            this.accounts[id].elo = response.data.elo;
+                            this.accounts[id].username = response.data.username;
+                            this.accounts[id].avatar_url = response.data.avatar_url;
+                            this.accounts[id].match_total = Number(response.data.match_total);
+                            this.accounts[id].credit2 = Number(response.data.credit2);
+                            this.accounts[id].code_string = "/images/refresh.gif";
+                            this.processedRecord++;
+                            if (this.accounts[id].match_total >= 10)
+                            {
+                                this.rankedAccountsCount++;
+                            }
+                            this.accounts.__ob__.dep.notify();
+                        })
+                    }))
+                }
+                Promise.all(ps).then(()=>{
+                    this.loading = false;
+                });
             })
         },
         data() {
             return {
-                accounts : [],
+                accounts : {},
                 currentSort:'name',
                 currentSortDir:'asc',
                 pageSize:5,
@@ -146,12 +154,12 @@
             prevPage:function() {
                 if(this.currentPage > 1) this.currentPage--;
             },
-            getotp:function (id,index) {
+            getotp:function (id) {
                 axios.get("/api/5ewin/elolist/getotp/" + id).then(response => {
-                    this.$set(this.accounts[index+(this.currentPage-1)*this.pageSize],'code_string',response.data.codeimg);
+                    this.$set(this.accounts[id],'code_string',response.data.codeimg);
                     this.$forceUpdate();
                     setTimeout( () => {
-                        this.$set(this.accounts[index+(this.currentPage-1)*this.pageSize],'code_string',"/images/refresh.gif");
+                        this.$set(this.accounts[id],'code_string',"/images/refresh.gif");
                         this.$forceUpdate();
                     }, 30000);
                 })
@@ -159,7 +167,7 @@
         },
         computed:{
             sortedAccounts:function() {
-                return this.accounts.sort((a,b) => {
+                return  Object.values(this.accounts).sort((a,b) => {
                     let modifier = 1;
                     if(this.currentSortDir === 'desc') modifier = -1;
                     if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
@@ -172,7 +180,7 @@
                 });
             },
             progress:function () {
-                return Math.round(this.processedRecord / this.accounts.length * 100)
+                return Math.round(this.processedRecord / Object.keys(this.accounts).length * 100)
             },
         }
     }
