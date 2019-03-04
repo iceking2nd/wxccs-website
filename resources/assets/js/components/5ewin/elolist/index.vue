@@ -53,7 +53,7 @@
                     <td>{{ account.match_total }}</td>
                     <td>{{ account.steam_account }}</td>
                     <td>{{ account.fewin_account }}</td>
-                    <td><img v-bind:id="'codeimg_' + account.id" v-if="account.otpauth_uri" :src="account.code_string" width="40px" height="100%" @click="getotp(account.id)"></td>
+                    <td><img v-if="account.otpauth_uri" :src="account.code_string" class="table-otp-img" @click="getotp(account.id)"></td>
                 </tr>
                 </tbody>
             </table>
@@ -93,6 +93,13 @@
         </div>
     </div>
 </template>
+
+<style scoped>
+    .table-otp-img{
+        width:40px;
+        min-height:20px;
+    }
+</style>
 
 <script>
     export default {
