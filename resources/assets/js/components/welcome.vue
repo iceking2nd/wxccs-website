@@ -4,7 +4,7 @@
 <template>
     <div class="flex-center position-ref full-height">
         <div class="fullscreen-bg">
-            <video ref="bgv" id="backgorund_video" volume="0.1" autoplay width="100%"></video>
+            <video ref="bgv" id="backgorund_video" volume="0.1" controls muted autoplay width="100%"></video>
         </div>
 
         <div class="warp">
@@ -23,6 +23,7 @@
                 this.$refs.bgv.src = response.data[0].url
                 this.$refs.bgv.type = response.data[0].mime
                 this.$refs.bgv.volume = 0.1
+                this.$refs.bgv.controls = true
                 this.$refs.bgv.play()
             })
         }
