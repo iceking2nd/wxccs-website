@@ -12,7 +12,6 @@
             <router-link to="/blog" tag="a">BLOG</router-link>
             <a href="https://github.com/iceking2nd/ielmatch-amxx">ielMatch</a>
             <router-link to="./5ewin/elolist">ELOList</router-link>
-            <h4><a href="http://www.miibeian.gov.cn">京ICP备14013733号</a></h4>
         </div>
     </div>
 </template>
