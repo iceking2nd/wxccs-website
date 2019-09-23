@@ -112,14 +112,14 @@
                     let id = accounts[i].id;
                     this.accounts[id] = accounts[i];
                     ps.push(new Promise(resolve=>setTimeout(resolve, 50*parseInt(i))).then(()=>{
-                        axios.get('/api/5ewin/elolist/proxy/' + accounts[i].domain_id).then(response => {
+                        axios.get('https://5ewin.api.wxccs.org.customer.pbsbd.cn/api/data/player/' + accounts[i].domain_id).then(response => {
                             if(response.status !== 200) return Promise.reject(new Error(response.status));
 
-                            this.accounts[id].elo = response.data.elo;
-                            this.accounts[id].username = response.data.username;
-                            this.accounts[id].avatar_url = response.data.avatar_url;
-                            this.accounts[id].match_total = Number(response.data.match_total);
-                            this.accounts[id].credit2 = Number(response.data.credit2);
+                            this.accounts[id].elo = response.data.data.elo;
+                            this.accounts[id].username = response.data.user.username;
+                            this.accounts[id].avatar_url = "https://oss.5ewin.com/" + response.data.user.avatar_url;
+                            this.accounts[id].match_total = Number(response.data.data.match_total);
+                            this.accounts[id].credit2 = Number(response.data.user.credit2);
                             this.accounts[id].code_string = "/images/refresh.gif";
                             this.processedRecord++;
                             if (this.accounts[id].match_total >= 10)
