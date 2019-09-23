@@ -111,16 +111,21 @@
                 for (let i = 0; i < Object.keys(accounts).length; i+=1){
                     let id = accounts[i].id;
                     this.accounts[id] = accounts[i];
-                    ps.push(new Promise(resolve=>setTimeout(resolve, 50*parseInt(i))).then(()=>{
+                    ps.push(new Promise(resolve=>setTimeout(resolve, 100*parseInt(i))).then(()=>{
                         axios.get('https://5ewin.api.wxccs.org.customer.pbsbd.cn/api/data/player/' + accounts[i].domain_id).then(response => {
                             if(response.status !== 200) return Promise.reject(new Error(response.status));
 
-                            this.accounts[id].elo = response.data.data.data.elo;
                             this.accounts[id].username = response.data.data.user.username;
                             this.accounts[id].avatar_url = "https://oss.5ewin.com/" + response.data.data.user.avatar_url;
-                            this.accounts[id].match_total = Number(response.data.data.data.match_total);
                             this.accounts[id].credit2 = Number(response.data.data.user.credit2);
                             this.accounts[id].code_string = "/images/refresh.gif";
+                            if (typeof response.data.data.data != "undefined") {
+                                this.accounts[id].elo = response.data.data.data.elo;
+                                this.accounts[id].match_total = Number(response.data.data.data.match_total);
+                            } else {
+                                this.accounts[id].elo = -2;
+                                this.accounts[id].match_total = 0;
+                            }
                             this.processedRecord++;
                             if (this.accounts[id].match_total >= 10)
                             {
