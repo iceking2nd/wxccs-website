@@ -115,11 +115,11 @@
                         axios.get('https://5ewin.api.wxccs.org.customer.pbsbd.cn/api/data/player/' + accounts[i].domain_id).then(response => {
                             if(response.status !== 200) return Promise.reject(new Error(response.status));
 
-                            this.accounts[id].elo = response.data.data.elo;
-                            this.accounts[id].username = response.data.user.username;
-                            this.accounts[id].avatar_url = "https://oss.5ewin.com/" + response.data.user.avatar_url;
-                            this.accounts[id].match_total = Number(response.data.data.match_total);
-                            this.accounts[id].credit2 = Number(response.data.user.credit2);
+                            this.accounts[id].elo = response.data.data.data.elo;
+                            this.accounts[id].username = response.data.data.user.username;
+                            this.accounts[id].avatar_url = "https://oss.5ewin.com/" + response.data.data.user.avatar_url;
+                            this.accounts[id].match_total = Number(response.data.data.data.match_total);
+                            this.accounts[id].credit2 = Number(response.data.data.user.credit2);
                             this.accounts[id].code_string = "/images/refresh.gif";
                             this.processedRecord++;
                             if (this.accounts[id].match_total >= 10)
