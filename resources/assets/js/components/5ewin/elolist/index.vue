@@ -112,7 +112,7 @@
                     let id = accounts[i].id;
                     this.accounts[id] = accounts[i];
                     ps.push(new Promise(resolve=>setTimeout(resolve, 100*parseInt(i))).then(()=>{
-                        axios.get('https://5ewin.api.wxccs.org.customer.pbsbd.cn/api/data/player/' + accounts[i].domain_id).then(response => {
+                        axios.get('https://labs.wxccs.org/api/data/player/' + accounts[i].domain_id).then(response => {
                             if(response.status !== 200) return Promise.reject(new Error(response.status));
 
                             this.accounts[id].username = response.data.data.user.username;
