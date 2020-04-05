@@ -23,6 +23,7 @@ Route::post('/token/refresh','Auth\LoginController@refresh');
 Route::post('/user/profile/update','System\ProfileController@update')->middleware('auth:api');
 Route::post('/user/password/update','System\PasswordController@update')->middleware('auth:api');
 
+Route::post('/live/auth','Live\Authcontroller@auth');
 
 Route::get('/system/backgroundvideo/randomone','System\BackGroundVideoController@randomone');
 Route::get('/5ewin/elolist/getallaccounts','Fewin\ELOListController@GetAllAccounts');
