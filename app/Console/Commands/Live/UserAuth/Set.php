@@ -17,7 +17,7 @@ class Set extends Command
         { channel : Live Channel }
         { username : Live Username }
         { publish_password : Password for publish mode }
-        { play_password : Password for play mode (use publish_password if not set ) }';
+        { play_password? : Password for play mode (use publish_password if not set ) }';
 
     /**
      * The console command description.
@@ -47,13 +47,13 @@ class Set extends Command
             'channel' => $this->argument('channel'),
             'username' => $this->argument('username'),
             'publish_password' => $this->argument('publish_password'),
-            'play_password' => $this->argument('play_password')
+            'play_password' => !is_null($this->argument('play_password')) ? $this->argument('play_password') : $this->argument('publish_password')
         ];
         $validator = Validator::make($datas, [
             'channel' => 'required|string',
             'username' => 'required|string',
             'publish_password' => 'required|string',
-            'play_password' => 'string'
+            'play_password' => 'required|string'
         ]);
         if ($validator->passes()) {
             $data = [
@@ -66,7 +66,7 @@ class Set extends Command
                 ->where('live_channel','=', $data['live_channel'])
                 ->where('live_user','=', $data['live_user'])
                 ->first();
-            if ($user->count() == 0) UserAuth::create($data);
+            if (is_null($user)) UserAuth::create($data);
             else $user->update($data);
             $this->info('User has been set.');
         } else {
